@@ -1,0 +1,1378 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cardápio & Pedidos - Baratão Assados</title>
+    <link rel="stylesheet" href="style_cardapio.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="background-animation"></div>
+
+    <section class="principal">
+      <header class="header-section">
+        <div class="logo-container">
+          <div class="logo-icon">
+            <i class="fas fa-fire"></i>
+          </div>
+          <div class="logo-text">
+            <h1>Cardápio & Pedidos</h1>
+            <p class="logo-subtitle">Escolha seus sabores e faça seu pedido!</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button
+            class="btn-cart"
+            data-action="toggle-cart"
+            aria-label="Abrir carrinho"
+          >
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-count" id="cartCount">0</span>
+          </button>
+          <button
+            class="btn-back"
+            data-action="navigate-home"
+            aria-label="Voltar à página inicial"
+          >
+            <i class="fas fa-arrow-left"></i>
+            <span>Voltar</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="status-card">
+        <div class="status-info">
+          <div class="status-indicator">
+            <div class="status-dot status-open"></div>
+            <span class="status-text">Aberto agora</span>
+          </div>
+          <div class="current-time" id="currentTime"></div>
+        </div>
+        <div class="available-services" id="availableServices"></div>
+      </div>
+
+      <div class="main-container">
+        <main class="menu-section">
+          <div class="time-filters">
+            <h3><i class="fas fa-utensils"></i> Nosso Cardápio</h3>
+            <div class="filters-buttons" id="categoryFilters">
+              <!-- Botão "Todos" é estático, outros filtros serão gerados dinamicamente -->
+              <button class="filter-btn active" data-filter="all">
+                <i class="fas fa-list"></i> Todos
+              </button>
+            </div>
+          </div>
+          <div class="categories-menu" id="categoriesMenu">
+            <!-- Categorias e produtos serão gerados dinamicamente aqui -->
+          </div>
+        </main>
+
+        <aside class="cart-section" id="cartSection">
+          <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Meu Pedido</h3>
+            <div class="cart-summary">
+              <span class="items-count" id="itemsCount">0 itens</span>
+              <button
+                class="btn-clear-cart"
+                data-action="clear-cart"
+                aria-label="Limpar carrinho"
+              >
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          <div class="cart-content">
+            <div class="cart-items" id="cartItems">
+              <div class="empty-cart">
+                <i class="fas fa-cart-plus"></i>
+                <p>Seu carrinho está vazio</p>
+                <span>Adicione itens do cardápio</span>
+              </div>
+            </div>
+            <div class="cart-footer">
+              <div class="cart-total">
+                <div class="total-line">
+                  <span>Subtotal:</span
+                  ><span class="subtotal" id="subtotal">R$ 0,00</span>
+                </div>
+                <div class="total-line delivery">
+                  <span>Taxa de entrega:</span
+                  ><span class="delivery-fee" id="deliveryFee">A calcular</span>
+                </div>
+                <div class="total-line total">
+                  <span>Total:</span
+                  ><span class="total-price" id="totalPrice">R$ 0,00</span>
+                </div>
+              </div>
+              <div class="cart-actions">
+                <button class="btn-schedule" data-action="show-schedule-modal">
+                  <i class="fas fa-calendar-alt"></i> Agendar Pedido
+                </button>
+                <button class="btn-finalize" data-action="finalize-order">
+                  <i class="fas fa-check"></i> Finalizar Pedido
+                </button>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+
+      <div
+        id="modalAgendamento"
+        class="modal"
+        role="dialog"
+        aria-labelledby="modal-title"
+        aria-hidden="true"
+      >
+        <div class="modal-content">
+          <div class="modal-header">
+            <h2 id="modal-title">Agendar Pedido</h2>
+            <button
+              class="close-btn"
+              data-action="close-schedule-modal"
+              aria-label="Fechar modal"
+            >
+              &times;
+            </button>
+          </div>
+          <div class="modal-body">
+            <form class="schedule-form" id="scheduleForm">
+              <div class="form-group">
+                <label for="agendData">Data do Pedido:</label>
+                <input type="date" id="agendData" required />
+              </div>
+              <div class="form-group">
+                <label for="agendHorario">Horário:</label>
+                <select id="agendHorario" required>
+                  <option value="">Selecione o horário</option>
+                  <option value="11:00">11:00 - Retirada</option>
+                  <option value="12:00">12:00 - Retirada</option>
+                  <option value="13:00">13:00 - Retirada</option>
+                  <option value="14:00">14:00 - Retirada</option>
+                  <option value="14:30">14:30 - Retirada (último)</option>
+                  <option value="delivery">Delivery</option>
+                </select>
+              </div>
+              <div class="payment-info">
+                <div class="info-box">
+                  <i class="fas fa-info-circle"></i>
+                  <p>
+                    Para agendamento é necessário pagar
+                    <strong>40-50% do valor via PIX</strong>
+                  </p>
+                </div>
+              </div>
+              <button type="submit" class="btn-schedule-confirm">
+                <i class="fas fa-calendar-check"></i> Confirmar Agendamento
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <footer class="contatos-section">
+        <p class="contatos-title">Onde nos encontrar</p>
+        <div class="contatos">
+          <a
+            href="https://www.instagram.com/barataoassados/"
+            target="_blank"
+            rel="noopener"
+            class="social-link instagram"
+            ><i class="fab fa-instagram"></i><span>Instagram</span></a
+          >
+          <a
+            href="https://wa.me/5500000000000"
+            target="_blank"
+            rel="noopener"
+            class="social-link whatsapp"
+            ><i class="fab fa-whatsapp"></i><span>WhatsApp</span></a
+          >
+          <a
+            href="https://wa.me/5500000000000"
+            target="_blank"
+            rel="noopener"
+            class="social-link location"
+            ><i class="fas fa-map-marker-alt"></i><span>Localização</span></a
+          >
+        </div>
+      </footer>
+    </section>
+
+    <div
+      id="notificationArea"
+      class="notification-area"
+      aria-live="polite"
+    ></div>
+
+    <script>
+      /**
+       * Sistema de Cardápio e Pedidos - Baratão Assados
+       * Arquitetura: Module Pattern + Observer Pattern
+       * Desenvolvido com ES6+ e princípios SOLID
+       * Refatorado para suportar múltiplos pesos e preços por produto.
+       */
+
+      // ==================== MÓDULO DE DADOS ====================
+      const DataModule = (() => {
+        "use strict";
+
+        // Configurações gerais da aplicação
+        const CONFIG = {
+          SCHEDULE_ADVANCE_PERCENTAGE: 0.45, // Percentual de pagamento antecipado para agendamento
+          UPDATE_TIME_INTERVAL: 60000, // Intervalo para atualização do relógio (1 minuto)
+          ANIMATION_DURATION: 3000, // Duração de animações (ex: notificações)
+          MIN_QUANTITY: 1, // Quantidade mínima de um item no card
+          MAX_QUANTITY: 99, // Quantidade máxima de um item no card
+        };
+
+        // Dados brutos da planilha fornecidos pelo usuário
+        const rawData = [
+          ["Contra-Filé", "Bovinos", "", "39.99"],
+          ["Fraldinha", "Bovinos", "300g", "37.99"],
+          ["Fraldinha", "Bovinos", "500g", "59.99"],
+          ["Fraldinha", "Bovinos", "1kg", "114.99"],
+          ["Maminha", "Bovinos", "300g", "37.99"],
+          ["Maminha", "Bovinos", "500g", "59.99"],
+          ["Maminha", "Bovinos", "1kg", "114.99"],
+          ["Maça do Peito", "Bovinos", "300g", "34.99"],
+          ["Maça do Peito", "Bovinos", "500g", "54.99"],
+          ["Maça do Peito", "Bovinos", "1kg", "104.99"],
+          ["Costela Desossada", "Bovinos", "300g", "34.99"],
+          ["Costela Desossada", "Bovinos", "500g", "54.99"],
+          ["Costela Desossada", "Bovinos", "1kg", "104.99"],
+          ["Cupim Prensado", "Bovinos", "300g", "38.99"],
+          ["Cupim Prensado", "Bovinos", "500g", "63.99"],
+          ["Cupim Prensado", "Bovinos", "1kg", "109.99"],
+          ["Frango Simples", "Frango", "", "52.99"],
+          ["Coxa e Sobrecoxa", "Frango", "", "11.99"],
+          ["Frango Combo Família", "Frango", "", "94.99"],
+          ["Combo Casal", "Frango", "", "58.99"],
+          ["Bomba de Frango", "Frango", "", "26.99"],
+          ["Coxa e Sobrecoxa Desossada e Recheada", "Frango", "", "26.99"],
+          ["Frango Desossado e Recheado", "Frango", "", "89.99"],
+          ["Peixe Recheado Caranha", "Peixe", "", "84.99"],
+          ["Lombo de Porco Recheado", "Suíno", "", "84.99"],
+          ["Linguiça Toscana", "Suíno", "", "3.99"],
+          ["Costelinha de Porco", "Suíno", "300g", "29.99"],
+          ["Costelinha de Porco", "Suíno", "500g", "47.99"],
+          ["Costelinha de Porco", "Suíno", "1kg", "89.99"],
+          ["Panceta", "Suíno", "300g", "29.99"],
+          ["Panceta", "Suíno", "500g", "47.99"],
+          ["Panceta", "Suíno", "1kg", "89.99"],
+          ["Arroz", "Acompanhamento", "G", "10"],
+          ["Arroz", "Acompanhamento", "M", "6"],
+          ["Feijão Tropeiro", "Acompanhamento", "", "15"],
+          ["Salpicão", "Acompanhamento", "", "8"],
+          ["Maionese", "Acompanhamento", "", "6"],
+          ["Coca Cola", "Bebida", "1L", "8.5"],
+          ["Coca Cola", "Bebida", "2L", "13.5"],
+          ["Fanta", "Bebida", "1L", "8.5"],
+          ["Fanta", "Bebida", "2L", "13.5"],
+          ["Mineirinho", "Bebida", "1L", "8.5"],
+          ["Mineirinho", "Bebida", "2L", "2.5"],
+          ["Pepsi", "Bebida", "1L", "8.5"],
+          ["Pepsi", "Bebida", "2L", "5.5"],
+          ["Contra-Filé", "Espetos", "", "15"],
+          ["Medalhão", "Espetos", "", "22"],
+          ["Kafta", "Espetos", "", "20"],
+          ["Linguiça Toscana", "Espetos", "", "20"],
+          ["Picanha", "Espetos", "", "53"],
+          ["Queijo Coalho", "Espetos", "", "53"],
+          ["Pão de Alho", "Espetos", "", "53"],
+          ["Camarão", "Espetos", "", "53"],
+        ];
+
+        /**
+         * Processa os dados brutos para uma estrutura de menu organizada por categoria e produto.
+         * Agrupa opções de peso/preço para o mesmo produto.
+         * @param {Array<Array<string>>} data - Array de arrays com [nome, categoria, tamanho, preço].
+         * @returns {Object<string, Array<Object>>} Objeto com categorias como chaves e arrays de produtos.
+         */
+        const processRawData = (data) => {
+          const productsMap = new Map(); // Mapa temporário para agrupar produtos pelo nome
+          let productIdCounter = 100; // Contador para IDs únicos de produtos
+
+          data.forEach(([name, category, size, price]) => {
+            const productName = name.trim();
+            const productCategory = category.trim();
+            const productPrice = parseFloat(price.replace(",", "."));
+
+            // Validação básica dos dados
+            if (!productName || !productCategory || isNaN(productPrice)) {
+              console.warn(
+                `Skipping invalid raw data entry: ${[
+                  name,
+                  category,
+                  size,
+                  price,
+                ]}`
+              );
+              return;
+            }
+
+            // Cria a opção de peso/preço
+            const option = {
+              description: size.trim() || "Único", // 'Único' se o tamanho for vazio
+              price: productPrice,
+            };
+
+            if (productsMap.has(productName)) {
+              // Se o produto já existe, adiciona a nova opção
+              productsMap.get(productName).options.push(option);
+            } else {
+              // Se é um novo produto, cria o objeto completo
+              productsMap.set(productName, {
+                id: productIdCounter++, // Atribui um ID único
+                name: productName,
+                category: productCategory,
+                options: [option],
+              });
+            }
+          });
+
+          // Agrupa os produtos processados por categoria
+          const menuByCategory = {};
+          productsMap.forEach((product) => {
+            // Normaliza a chave da categoria (ex: "Bovinos" -> "bovinos")
+            const categoryKey = product.category
+              .toLowerCase()
+              .replace(/\s+/g, "-");
+            if (!menuByCategory[categoryKey]) {
+              menuByCategory[categoryKey] = [];
+            }
+            menuByCategory[categoryKey].push(product);
+          });
+
+          return menuByCategory;
+        };
+
+        // O MENU_DATA final, processado a partir dos dados brutos
+        const MENU_DATA = processRawData(rawData);
+
+        /**
+         * Busca um produto pelo seu ID em todas as categorias.
+         * @param {number} id - ID do produto.
+         * @returns {Object|null} O objeto do produto ou null se não encontrado.
+         */
+        const findProductById = (id) => {
+          for (const categoryKey in MENU_DATA) {
+            const product = MENU_DATA[categoryKey].find((p) => p.id === id);
+            if (product) return product;
+          }
+          return null;
+        };
+
+        // API pública do módulo de dados
+        return {
+          CONFIG,
+          MENU_DATA,
+          findProductById,
+        };
+      })();
+
+      // ==================== MÓDULO DE UTILITÁRIOS ====================
+      const UtilsModule = (() => {
+        "use strict";
+
+        /**
+         * Formata um valor numérico para o formato de moeda brasileira.
+         * @param {number} value - O valor a ser formatado.
+         * @returns {string} O valor formatado (ex: "R$ 10,50").
+         */
+        const formatCurrency = (value) =>
+          `R$ ${value.toFixed(2).replace(".", ",")}`;
+
+        /**
+         * Formata a hora atual para o padrão brasileiro.
+         * @param {Date} [date=new Date()] - Objeto Date a ser formatado.
+         * @returns {string} A hora formatada (ex: "14:30").
+         */
+        const formatTime = (date = new Date()) =>
+          date.toLocaleTimeString("pt-BR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+
+        /**
+         * Sanitiza uma string para prevenir ataques XSS (Cross-Site Scripting).
+         * @param {string} text - O texto a ser sanitizado.
+         * @returns {string} O texto sanitizado.
+         */
+        const sanitizeText = (text) => {
+          const div = document.createElement("div");
+          div.textContent = text;
+          return div.innerHTML;
+        };
+
+        /**
+         * Retorna o primeiro elemento do DOM que corresponde ao seletor CSS.
+         * @param {string} selector - O seletor CSS.
+         * @returns {Element|null} O elemento encontrado ou null.
+         */
+        const getElement = (selector) => document.querySelector(selector);
+
+        /**
+         * Retorna todos os elementos do DOM que correspondem ao seletor CSS.
+         * @param {string} selector - O seletor CSS.
+         * @returns {NodeListOf<Element>} Uma NodeList de elementos.
+         */
+        const getAllElements = (selector) =>
+          document.querySelectorAll(selector);
+
+        /**
+         * Cria uma função com debounce, que atrasa a execução da função até que um certo tempo
+         * tenha passado sem que ela seja chamada novamente. Útil para eventos como redimensionamento.
+         * @param {Function} func - A função a ser executada.
+         * @param {number} wait - O tempo de espera em milissegundos.
+         * @returns {Function} A função com debounce.
+         */
+        const debounce = (func, wait) => {
+          let timeout;
+          return function executedFunction(...args) {
+            const later = () => {
+              clearTimeout(timeout);
+              func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+          };
+        };
+
+        /**
+         * Cria um elemento DOM com atributos e conteúdo.
+         * @param {string} tag - A tag HTML do elemento (ex: 'div', 'button').
+         * @param {Object} [attributes={}] - Um objeto com os atributos a serem definidos.
+         * @param {string} [content=''] - O conteúdo HTML interno do elemento.
+         * @returns {Element} O elemento DOM criado.
+         */
+        const createElement = (tag, attributes = {}, content = "") => {
+          const element = document.createElement(tag);
+
+          Object.entries(attributes).forEach(([key, value]) => {
+            if (key === "className") {
+              // Propriedade especial para 'class'
+              element.className = value;
+            } else if (key === "dataset") {
+              // Propriedade especial para data-attributes
+              Object.entries(value).forEach(([dataKey, dataValue]) => {
+                element.dataset[dataKey] = dataValue;
+              });
+            } else {
+              element.setAttribute(key, value);
+            }
+          });
+
+          if (content) {
+            element.innerHTML = content;
+          }
+
+          return element;
+        };
+
+        // API pública do módulo de utilitários
+        return {
+          formatCurrency,
+          formatTime,
+          sanitizeText,
+          getElement,
+          getAllElements,
+          debounce,
+          createElement,
+        };
+      })();
+
+      // ==================== MÓDULO DE NOTIFICAÇÕES ====================
+      const NotificationModule = (() => {
+        "use strict";
+
+        // Tipos de notificação para estilização e ícones
+        const NOTIFICATION_TYPES = {
+          SUCCESS: "success",
+          ERROR: "error",
+          INFO: "info",
+          WARNING: "warning",
+        };
+
+        /**
+         * Exibe uma notificação temporária na tela.
+         * @param {string} message - A mensagem a ser exibida.
+         * @param {string} [type=NOTIFICATION_TYPES.INFO] - O tipo da notificação (success, error, info, warning).
+         * @param {number} [duration=3000] - A duração da notificação em milissegundos.
+         */
+        const show = (
+          message,
+          type = NOTIFICATION_TYPES.INFO,
+          duration = 3000
+        ) => {
+          const notificationArea = UtilsModule.getElement("#notificationArea");
+          if (!notificationArea) return;
+
+          // Cria o elemento da notificação usando o utilitário
+          const notification = UtilsModule.createElement(
+            "div",
+            {
+              className: `notification notification--${type}`,
+              "aria-live": "polite", // Anuncia para leitores de tela
+            },
+            `
+            <div class="notification__content">
+                <i class="notification__icon ${getIconForType(type)}"></i>
+                <span class="notification__message">${UtilsModule.sanitizeText(
+                  message
+                )}</span>
+            </div>
+        `
+          );
+
+          notificationArea.appendChild(notification);
+
+          // Remove a notificação após a duração especificada
+          setTimeout(() => {
+            notification.classList.add("notification--removing"); // Adiciona classe para animação de saída
+            setTimeout(() => notification.remove(), 300); // Remove o elemento após a animação
+          }, duration);
+        };
+
+        /**
+         * Retorna a classe de ícone Font Awesome apropriada para o tipo de notificação.
+         * @param {string} type - O tipo da notificação.
+         * @returns {string} A classe CSS do ícone.
+         */
+        const getIconForType = (type) => {
+          const icons = {
+            [NOTIFICATION_TYPES.SUCCESS]: "fas fa-check-circle",
+            [NOTIFICATION_TYPES.ERROR]: "fas fa-exclamation-circle",
+            [NOTIFICATION_TYPES.INFO]: "fas fa-info-circle",
+            [NOTIFICATION_TYPES.WARNING]: "fas fa-exclamation-triangle",
+          };
+          return icons[type] || icons[NOTIFICATION_TYPES.INFO];
+        };
+
+        // API pública do módulo de notificações, com métodos de conveniência
+        return {
+          show,
+          success: (message, duration) =>
+            show(message, NOTIFICATION_TYPES.SUCCESS, duration),
+          error: (message, duration) =>
+            show(message, NOTIFICATION_TYPES.ERROR, duration),
+          info: (message, duration) =>
+            show(message, NOTIFICATION_TYPES.INFO, duration),
+          warning: (message, duration) =>
+            show(message, NOTIFICATION_TYPES.WARNING, duration),
+          TYPES: NOTIFICATION_TYPES,
+        };
+      })();
+
+      // ==================== MÓDULO DO CARRINHO ====================
+      const CartModule = (() => {
+        "use strict";
+
+        let cartItems = []; // Array para armazenar os itens do carrinho
+        const observers = []; // Array de callbacks para o padrão Observer
+
+        /**
+         * Adiciona um observador que será notificado quando o carrinho for atualizado.
+         * @param {Function} callback - A função a ser chamada.
+         */
+        const addObserver = (callback) => {
+          observers.push(callback);
+        };
+
+        /**
+         * Notifica todos os observadores sobre uma mudança no carrinho.
+         */
+        const notifyObservers = () => {
+          observers.forEach((callback) => callback(cartItems));
+        };
+
+        /**
+         * Adiciona um produto com uma opção de peso/preço específica ao carrinho.
+         * @param {number} productId - O ID do produto.
+         * @param {number} selectedOptionIndex - O índice da opção de peso/preço selecionada.
+         * @param {number} quantity - A quantidade a ser adicionada.
+         * @returns {boolean} True se o item foi adicionado/atualizado, false caso contrário.
+         */
+        const addItem = (productId, selectedOptionIndex, quantity) => {
+          const product = DataModule.findProductById(productId);
+          // Verifica se o produto e a opção são válidos
+          if (!product || !product.options[selectedOptionIndex]) {
+            NotificationModule.error(
+              "Produto ou opção de peso/preço inválida."
+            );
+            return false;
+          }
+
+          if (quantity <= 0) {
+            NotificationModule.warning("A quantidade deve ser maior que zero.");
+            return false;
+          }
+
+          const selectedOption = product.options[selectedOptionIndex];
+          // Cria um ID único para o item no carrinho (produto + opção)
+          const cartItemId = `${productId}-${selectedOptionIndex}`;
+
+          const existingItem = cartItems.find(
+            (item) => item.cartId === cartItemId
+          );
+
+          if (existingItem) {
+            // Se o item já existe, apenas atualiza a quantidade
+            existingItem.quantity += quantity;
+          } else {
+            // Se é um novo item, adiciona ao carrinho
+            cartItems.push({
+              cartId: cartItemId,
+              id: product.id,
+              name: product.name,
+              quantity: quantity,
+              selectedOption: selectedOption, // Armazena a opção completa
+            });
+          }
+
+          notifyObservers(); // Notifica os observadores sobre a mudança
+          NotificationModule.success(
+            `${quantity}x ${product.name} (${selectedOption.description}) adicionado ao carrinho!`
+          );
+          return true;
+        };
+
+        /**
+         * Remove um item do carrinho com base no seu ID de carrinho.
+         * @param {string} cartId - O ID único do item no carrinho.
+         */
+        const removeItem = (cartId) => {
+          const initialLength = cartItems.length;
+          cartItems = cartItems.filter((item) => item.cartId !== cartId); // Filtra o item a ser removido
+
+          if (cartItems.length < initialLength) {
+            notifyObservers(); // Notifica se houve remoção
+            NotificationModule.info("Item removido do carrinho.");
+          }
+        };
+
+        /**
+         * Atualiza a quantidade de um item existente no carrinho.
+         * @param {string} cartId - O ID único do item no carrinho.
+         * @param {number} change - A mudança na quantidade (ex: +1, -1).
+         */
+        const updateItemQuantity = (cartId, change) => {
+          const item = cartItems.find((item) => item.cartId === cartId);
+          if (!item) return;
+
+          const newQuantity = item.quantity + change;
+
+          if (newQuantity <= 0) {
+            removeItem(cartId); // Remove o item se a quantidade for zero ou negativa
+          } else {
+            item.quantity = newQuantity;
+            notifyObservers(); // Notifica sobre a atualização
+          }
+        };
+
+        /**
+         * Limpa todos os itens do carrinho.
+         */
+        const clearCart = () => {
+          if (cartItems.length === 0) {
+            NotificationModule.info("O carrinho já está vazio.");
+            return;
+          }
+
+          if (confirm("Tem certeza que deseja limpar o carrinho?")) {
+            cartItems = [];
+            notifyObservers(); // Notifica que o carrinho foi limpo
+            NotificationModule.success("Carrinho limpo com sucesso.");
+          }
+        };
+
+        /**
+         * Calcula os totais do carrinho (número de itens, subtotal, total).
+         * @returns {Object} Um objeto com totalItems, subtotal e total.
+         */
+        const calculateTotals = () => {
+          const totalItems = cartItems.reduce(
+            (sum, item) => sum + item.quantity,
+            0
+          );
+          // Calcula o subtotal usando o preço da opção selecionada
+          const subtotal = cartItems.reduce(
+            (sum, item) => sum + item.selectedOption.price * item.quantity,
+            0
+          );
+          const deliveryFee = 0; // Lógica para taxa de entrega pode ser implementada aqui
+          const total = subtotal + deliveryFee;
+
+          return { totalItems, subtotal, deliveryFee, total };
+        };
+
+        // API pública do módulo do carrinho
+        return {
+          addItem,
+          removeItem,
+          updateItemQuantity,
+          clearCart,
+          calculateTotals,
+          addObserver,
+
+          // Getters para acessar o estado do carrinho
+          get items() {
+            return [...cartItems];
+          },
+          get isEmpty() {
+            return cartItems.length === 0;
+          },
+        };
+      })();
+
+      // ==================== MÓDULO DE UI (INTERFACE) ====================
+      const UIModule = (() => {
+        "use strict";
+
+        let isCartVisible = window.innerWidth > 1024; // Estado inicial da visibilidade do carrinho
+
+        /**
+         * Renderiza todas as categorias do menu e seus produtos.
+         * Também gera os botões de filtro de categoria.
+         */
+        const renderMenu = () => {
+          const menuContainer = UtilsModule.getElement("#categoriesMenu");
+          const filtersContainer = UtilsModule.getElement("#categoryFilters");
+          if (!menuContainer || !filtersContainer) return;
+
+          menuContainer.innerHTML = "";
+          // Remove botões de filtro dinâmicos existentes (mantém o "Todos")
+          filtersContainer
+            .querySelectorAll('.filter-btn:not([data-filter="all"])')
+            .forEach((btn) => btn.remove());
+
+          const categories = Object.keys(DataModule.MENU_DATA);
+
+          categories.forEach((categoryKey) => {
+            // Formata o nome da categoria para exibição (ex: "bovinos" -> "Bovinos")
+            const categoryName =
+              categoryKey.charAt(0).toUpperCase() +
+              categoryKey.slice(1).replace(/-/g, " ");
+
+            // Cria e adiciona o botão de filtro para a categoria
+            const filterBtn = UtilsModule.createElement(
+              "button",
+              {
+                className: "filter-btn",
+                dataset: { filter: categoryKey },
+              },
+              `<i class="fas fa-tag"></i> ${categoryName}`
+            ); // Ícone genérico para categoria
+            filtersContainer.appendChild(filterBtn);
+
+            // Cria a seção da categoria no menu
+            const section = UtilsModule.createElement(
+              "div",
+              {
+                className: "category-section",
+                dataset: { category: categoryKey },
+              },
+              `<div class="category-header"><h3>${categoryName}</h3></div>`
+            );
+
+            const grid = UtilsModule.createElement("div", {
+              className: "products-grid",
+            });
+            DataModule.MENU_DATA[categoryKey].forEach((product) => {
+              grid.innerHTML += createProductCard(product); // Adiciona os cards de produto
+            });
+            section.appendChild(grid);
+            menuContainer.appendChild(section);
+          });
+        };
+
+        /**
+         * Cria o HTML para um card de produto, incluindo o seletor de peso/preço se necessário.
+         * @param {Object} product - O objeto do produto.
+         * @returns {string} O HTML do card do produto.
+         */
+        const createProductCard = (product) => {
+          // Verifica se o produto tem múltiplas opções de peso/preço
+          const needsWeightSelector = product.options.length > 1;
+
+          const optionsHTML = needsWeightSelector
+            ? `<div class="product-options">
+                 <select class="weight-selector" data-product-id="${
+                   product.id
+                 }" aria-label="Selecione o peso para ${product.name}">
+                   ${product.options
+                     .map(
+                       (opt, index) =>
+                         `<option value="${index}">${UtilsModule.sanitizeText(
+                           opt.description
+                         )}</option>`
+                     )
+                     .join("")}
+                 </select>
+               </div>`
+            : "";
+
+          // O preço inicial exibido é sempre o da primeira opção
+          const initialPrice = UtilsModule.formatCurrency(
+            product.options[0].price
+          );
+          // A quantidade inicial para adicionar ao carrinho é 1
+          const initialQuantity = DataModule.CONFIG.MIN_QUANTITY;
+
+          return `
+            <div class="product-card" data-id="${product.id}">
+                <div class="product-info">
+                    <h4 class="product-name">${UtilsModule.sanitizeText(
+                      product.name
+                    )}</h4>
+                </div>
+                ${optionsHTML}
+                <div class="product-price" id="price-${
+                  product.id
+                }">${initialPrice}</div>
+                <div class="product-actions">
+                    <div class="quantity-controls">
+                        <button class="qty-btn" data-action="change-quantity" data-product-id="${
+                          product.id
+                        }" data-change="-1" aria-label="Diminuir quantidade de ${
+            product.name
+          }">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <span class="quantity" id="qty-${
+                          product.id
+                        }">${initialQuantity}</span>
+                        <button class="qty-btn" data-action="change-quantity" data-product-id="${
+                          product.id
+                        }" data-change="1" aria-label="Aumentar quantidade de ${
+            product.name
+          }">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <button class="btn-add-to-cart" data-action="add-to-cart" data-product-id="${
+                      product.id
+                    }" aria-label="Adicionar ${product.name} ao carrinho">
+                        <i class="fas fa-cart-plus"></i>
+                        <span>Adicionar</span>
+                    </button>
+                </div>
+            </div>`;
+        };
+
+        /**
+         * Atualiza o preço exibido em um card de produto quando a opção de peso é alterada.
+         * @param {number} productId - O ID do produto.
+         * @param {number} optionIndex - O índice da nova opção selecionada.
+         */
+        const updateProductPrice = (productId, optionIndex) => {
+          const product = DataModule.findProductById(productId);
+          const priceElement = UtilsModule.getElement(`#price-${productId}`);
+          if (product && priceElement && product.options[optionIndex]) {
+            const newPrice = product.options[optionIndex].price;
+            priceElement.textContent = UtilsModule.formatCurrency(newPrice);
+          }
+        };
+
+        /**
+         * Cria o HTML para um item individual no carrinho.
+         * @param {Object} item - O objeto do item do carrinho.
+         * @returns {string} O HTML do item do carrinho.
+         */
+        const createCartItemHTML = (item) => {
+          return `
+            <div class="cart-item" data-cart-id="${item.cartId}">
+                <div class="item-details">
+                    <h5 class="item-name">${UtilsModule.sanitizeText(
+                      item.name
+                    )}</h5>
+                    <p class="item-description">${UtilsModule.sanitizeText(
+                      item.selectedOption.description
+                    )}</p>
+                    <p class="item-price">${UtilsModule.formatCurrency(
+                      item.selectedOption.price
+                    )}</p>
+                </div>
+                <div class="item-controls">
+                    <button class="qty-btn" data-action="update-cart-item" data-cart-id="${
+                      item.cartId
+                    }" data-change="-1" aria-label="Diminuir quantidade de ${
+            item.name
+          } ${item.selectedOption.description}">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <span class="quantity">${item.quantity}</span>
+                    <button class="qty-btn" data-action="update-cart-item" data-cart-id="${
+                      item.cartId
+                    }" data-change="1" aria-label="Aumentar quantidade de ${
+            item.name
+          } ${item.selectedOption.description}">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <button class="btn-remove" data-action="remove-from-cart" data-cart-id="${
+                      item.cartId
+                    }" aria-label="Remover ${item.name} ${
+            item.selectedOption.description
+          } do carrinho">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>`;
+        };
+
+        /**
+         * Renderiza o conteúdo do carrinho com base nos itens atuais.
+         * @param {Array<Object>} cartItems - O array de itens do carrinho.
+         */
+        const renderCart = (cartItems) => {
+          const cartItemsContainer = UtilsModule.getElement("#cartItems");
+          if (!cartItemsContainer) return;
+
+          if (cartItems.length === 0) {
+            cartItemsContainer.innerHTML = `
+                <div class="empty-cart">
+                    <i class="fas fa-cart-plus"></i>
+                    <p>Seu carrinho está vazio</p>
+                    <span>Adicione itens do cardápio</span>
+                </div>
+            `;
+          } else {
+            cartItemsContainer.innerHTML = cartItems
+              .map(createCartItemHTML)
+              .join("");
+          }
+          updateCartSummary(); // Atualiza o resumo do carrinho
+        };
+
+        /**
+         * Atualiza os elementos de resumo do carrinho (contagem de itens, subtotal, total).
+         */
+        const updateCartSummary = () => {
+          const totals = CartModule.calculateTotals();
+
+          // Atualiza os elementos do DOM com os totais calculados
+          UtilsModule.getElement("#cartCount").textContent =
+            totals.totalItems.toString();
+          UtilsModule.getElement("#itemsCount").textContent = `${
+            totals.totalItems
+          } ${totals.totalItems === 1 ? "item" : "itens"}`;
+          UtilsModule.getElement("#subtotal").textContent =
+            UtilsModule.formatCurrency(totals.subtotal);
+          UtilsModule.getElement("#totalPrice").textContent =
+            UtilsModule.formatCurrency(totals.total);
+        };
+
+        /**
+         * Atualiza o horário atual exibido no status card.
+         */
+        const updateCurrentTime = () => {
+          const timeElement = UtilsModule.getElement("#currentTime");
+          if (timeElement) {
+            timeElement.textContent = UtilsModule.formatTime();
+          }
+        };
+
+        /**
+         * Atualiza os serviços disponíveis exibidos no status card.
+         * (Atualmente em modo demonstração, sempre disponíveis).
+         */
+        const updateAvailableServices = () => {
+          const servicesContainer =
+            UtilsModule.getElement("#availableServices");
+          if (!servicesContainer) return;
+
+          const availableServices = [
+            { name: "Almoço", icon: "fas fa-sun" },
+            { name: "Assados Completos", icon: "fas fa-star" },
+            { name: "Jantinha", icon: "fas fa-moon" },
+          ];
+
+          servicesContainer.innerHTML = availableServices
+            .map(
+              (service) => `
+                <span class="service-tag available">
+                    <i class="${service.icon}"></i>
+                    ${service.name}
+                </span>
+            `
+            )
+            .join("");
+        };
+
+        /**
+         * Alterna a visibilidade da seção do carrinho.
+         */
+        const toggleCart = () => {
+          const principal = UtilsModule.getElement(".principal");
+          if (principal) {
+            principal.classList.toggle("cart-open"); // Adiciona/remove classe para controlar visibilidade
+            isCartVisible = principal.classList.contains("cart-open");
+          }
+        };
+
+        /**
+         * Configura a responsividade do layout, especialmente a visibilidade do carrinho.
+         */
+        const setupResponsive = () => {
+          const handleResize = UtilsModule.debounce(() => {
+            const principal = UtilsModule.getElement(".principal");
+            if (!principal) return;
+
+            // Em telas maiores (desktop), o carrinho deve estar visível por padrão
+            if (window.innerWidth > 1024) {
+              principal.classList.add("cart-open");
+              isCartVisible = true;
+            } else {
+              // Em telas menores, se o carrinho estava aberto, fecha-o
+              if (isCartVisible && window.innerWidth <= 1024) {
+                principal.classList.remove("cart-open");
+                isCartVisible = false;
+              }
+            }
+          }, 250); // Usa debounce para otimizar o evento de redimensionamento
+
+          window.addEventListener("resize", handleResize);
+          handleResize(); // Executa a verificação inicial ao carregar a página
+        };
+
+        // API pública do módulo de UI
+        return {
+          renderMenu,
+          renderCart,
+          updateProductPrice,
+          updateCurrentTime,
+          updateAvailableServices,
+          toggleCart,
+          setupResponsive,
+        };
+      })();
+
+      // ==================== MÓDULO DE AGENDAMENTO ====================
+      const ScheduleModule = (() => {
+        "use strict";
+
+        /**
+         * Exibe o modal de agendamento de pedido.
+         */
+        const showModal = () => {
+          if (CartModule.isEmpty) {
+            NotificationModule.warning(
+              "Adicione itens ao carrinho antes de agendar!"
+            );
+            return;
+          }
+
+          const modal = UtilsModule.getElement("#modalAgendamento");
+          if (modal) {
+            modal.style.display = "flex";
+            modal.setAttribute("aria-hidden", "false"); // Torna o modal visível para leitores de tela
+
+            // Define a data mínima do input de data como o dia atual
+            const dateInput = UtilsModule.getElement("#agendData");
+            if (dateInput) {
+              dateInput.min = new Date().toISOString().split("T")[0];
+            }
+
+            // Foca no primeiro campo do formulário para acessibilidade
+            setTimeout(() => {
+              if (dateInput) dateInput.focus();
+            }, 100);
+          }
+        };
+
+        /**
+         * Fecha o modal de agendamento de pedido.
+         */
+        const closeModal = () => {
+          const modal = UtilsModule.getElement("#modalAgendamento");
+          if (modal) {
+            modal.style.display = "none";
+            modal.setAttribute("aria-hidden", "true"); // Oculta o modal para leitores de tela
+          }
+        };
+
+        /**
+         * Confirma o agendamento do pedido, exibe um resumo e fecha o modal.
+         * @param {Event} event - O evento de submissão do formulário.
+         */
+        const confirmSchedule = (event) => {
+          event.preventDefault(); // Previne o comportamento padrão de submissão do formulário
+
+          const data = UtilsModule.getElement("#agendData")?.value;
+          const horario = UtilsModule.getElement("#agendHorario")?.value;
+
+          if (!data || !horario) {
+            NotificationModule.error("Preencha todos os campos para agendar!");
+            return;
+          }
+
+          const totals = CartModule.calculateTotals();
+          // Calcula o valor antecipado com base na porcentagem configurada
+          const valorAntecipado = (
+            totals.total * DataModule.CONFIG.SCHEDULE_ADVANCE_PERCENTAGE
+          ).toFixed(2);
+
+          const message = `Agendamento confirmado!
+Data: ${new Date(data).toLocaleDateString("pt-BR")}
+Horário: ${horario}
+
+Valor total: ${UtilsModule.formatCurrency(totals.total)}
+Valor antecipado (PIX): ${UtilsModule.formatCurrency(
+            parseFloat(valorAntecipado)
+          )}
+
+Você receberá o PIX em breve para pagamento antecipado.`;
+
+          alert(message); // Exibe um alerta com o resumo do agendamento
+          closeModal(); // Fecha o modal
+
+          NotificationModule.success("Agendamento confirmado com sucesso!");
+        };
+
+        // API pública do módulo de agendamento
+        return {
+          showModal,
+          closeModal,
+          confirmSchedule,
+        };
+      })();
+
+      // ==================== MÓDULO PRINCIPAL (APP) ====================
+      const App = (() => {
+        "use strict";
+
+        /**
+         * Gerenciador central de ações globais via delegação de eventos.
+         * @param {Event} event - O evento de clique.
+         */
+        const handleGlobalActions = (event) => {
+          const target = event.target.closest("[data-action]"); // Encontra o elemento com data-action
+          if (!target) return;
+
+          const { action, productId, cartId, change } = target.dataset;
+          const parsedProductId = parseInt(productId);
+          const parsedChange = parseInt(change);
+
+          // Previne o comportamento padrão de botões para evitar recarregamento da página
+          if (target.tagName === "BUTTON") {
+            event.preventDefault();
+          }
+
+          // Roteamento das ações com base no atributo data-action
+          switch (action) {
+            case "toggle-cart":
+              UIModule.toggleCart();
+              break;
+            case "navigate-home":
+              window.location.href = "index.html"; // Redireciona para a página inicial
+              break;
+            case "clear-cart":
+              CartModule.clearCart();
+              break;
+            case "change-quantity": {
+              // Ação para mudar a quantidade no card do produto
+              if (isNaN(parsedProductId) || isNaN(parsedChange)) return;
+              const qtyElement = UtilsModule.getElement(
+                `#qty-${parsedProductId}`
+              );
+              if (qtyElement) {
+                let currentQty = parseInt(qtyElement.textContent);
+                // Garante que a quantidade não seja menor que a mínima configurada
+                currentQty = Math.max(
+                  DataModule.CONFIG.MIN_QUANTITY,
+                  currentQty + parsedChange
+                );
+                qtyElement.textContent = currentQty.toString();
+              }
+              break;
+            }
+            case "add-to-cart": {
+              // Ação para adicionar o produto ao carrinho
+              if (isNaN(parsedProductId)) return;
+              const qtyElement = UtilsModule.getElement(
+                `#qty-${parsedProductId}`
+              );
+              // Obtém a quantidade atual exibida no card, ou 1 como padrão
+              const quantity = qtyElement
+                ? parseInt(qtyElement.textContent)
+                : DataModule.CONFIG.MIN_QUANTITY;
+
+              // Obtém o índice da opção de peso/preço selecionada
+              const selector = UtilsModule.getElement(
+                `.weight-selector[data-product-id="${parsedProductId}"]`
+              );
+              const selectedOptionIndex = selector
+                ? parseInt(selector.value)
+                : 0; // Padrão: primeira opção
+
+              if (
+                CartModule.addItem(
+                  parsedProductId,
+                  selectedOptionIndex,
+                  quantity
+                )
+              ) {
+                // Após adicionar ao carrinho, reseta a quantidade no card para a mínima
+                if (qtyElement)
+                  qtyElement.textContent =
+                    DataModule.CONFIG.MIN_QUANTITY.toString();
+              }
+              break;
+            }
+            case "update-cart-item": // Ação para atualizar a quantidade de um item no carrinho
+              if (cartId && !isNaN(parsedChange)) {
+                CartModule.updateItemQuantity(cartId, parsedChange);
+              }
+              break;
+            case "remove-from-cart": // Ação para remover um item do carrinho
+              if (cartId) {
+                CartModule.removeItem(cartId);
+              }
+              break;
+            case "show-schedule-modal":
+              ScheduleModule.showModal();
+              break;
+            case "close-schedule-modal":
+              ScheduleModule.closeModal();
+              break;
+            case "finalize-order":
+              finalizeOrder(); // Chama a função de finalização de pedido
+              break;
+            default:
+              console.warn(`Ação não reconhecida: ${action}`);
+          }
+        };
+
+        /**
+         * Gerencia a filtragem de produtos por categoria.
+         * @param {Event} event - O evento de clique no botão de filtro.
+         */
+        const handleFilter = (event) => {
+          const target = event.target.closest("[data-filter]");
+          if (!target) return;
+
+          // Remove a classe 'active' de todos os botões de filtro
+          UtilsModule.getAllElements(".filter-btn.active").forEach((b) =>
+            b.classList.remove("active")
+          );
+          target.classList.add("active"); // Adiciona 'active' ao botão clicado
+
+          const filter = target.dataset.filter;
+          // Exibe ou oculta as seções de categoria com base no filtro
+          UtilsModule.getAllElements(".category-section").forEach((sec) => {
+            sec.style.display =
+              filter === "all" || sec.dataset.category === filter
+                ? "block"
+                : "none";
+          });
+        };
+
+        /**
+         * Gerencia a mudança de opção nos seletores de peso/preço.
+         * @param {Event} event - O evento de 'change' no seletor.
+         */
+        const handleOptionChange = (event) => {
+          if (event.target.matches(".weight-selector")) {
+            const productId = parseInt(event.target.dataset.productId);
+            const optionIndex = parseInt(event.target.value);
+            if (!isNaN(productId) && !isNaN(optionIndex)) {
+              UIModule.updateProductPrice(productId, optionIndex); // Atualiza o preço exibido
+            }
+          }
+        };
+
+        /**
+         * Finaliza o pedido, exibe um resumo e notifica o usuário.
+         */
+        const finalizeOrder = () => {
+          if (CartModule.isEmpty) {
+            NotificationModule.warning("Adicione itens ao carrinho primeiro!");
+            return;
+          }
+
+          const totals = CartModule.calculateTotals();
+
+          const message = `Pedido finalizado com sucesso!
+
+Itens: ${totals.totalItems} produtos
+Total: ${UtilsModule.formatCurrency(totals.total)}
+
+Você será redirecionado para finalização do pagamento e dados de entrega.`;
+
+          alert(message);
+          NotificationModule.success("Pedido enviado com sucesso!");
+        };
+
+        /**
+         * Inicializa a aplicação, configurando a UI, eventos e observadores.
+         */
+        const init = () => {
+          // Garante que o DOM esteja completamente carregado antes de inicializar
+          document.addEventListener("DOMContentLoaded", () => {
+            try {
+              // Renderiza a interface inicial
+              UIModule.renderMenu();
+              UIModule.updateCurrentTime();
+              UIModule.updateAvailableServices();
+              UIModule.setupResponsive();
+              CartModule.addObserver(UIModule.renderCart); // O carrinho observará as mudanças na UI
+
+              // Configura os listeners de eventos globais e específicos
+              document.addEventListener("click", handleGlobalActions);
+              UtilsModule.getElement("#categoryFilters").addEventListener(
+                "click",
+                handleFilter
+              );
+              // Delegação de evento para mudanças nos seletores de peso
+              UtilsModule.getElement("#categoriesMenu").addEventListener(
+                "change",
+                handleOptionChange
+              );
+
+              // Configura a atualização periódica do relógio
+              setInterval(
+                UIModule.updateCurrentTime,
+                DataModule.CONFIG.UPDATE_TIME_INTERVAL
+              );
+              NotificationModule.success("Cardápio carregado com sucesso!");
+            } catch (error) {
+              console.error("❌ Erro na inicialização da aplicação:", error);
+              NotificationModule.error(
+                "Não foi possível carregar o cardápio. Tente recarregar a página."
+              );
+            }
+          });
+        };
+
+        // API pública do módulo principal
+        return { init };
+      })();
+
+      // Inicia a aplicação
+      App.init();
+
+      // Exportar módulos para debug (apenas em desenvolvimento)
+      if (
+        typeof window !== "undefined" &&
+        window.location.hostname === "localhost"
+      ) {
+        window.DebugModules = {
+          Data: DataModule,
+          Utils: UtilsModule,
+          Notification: NotificationModule,
+          Cart: CartModule,
+          UI: UIModule,
+          Schedule: ScheduleModule,
+          App,
+        };
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style_login.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Login - Baratão Assados</title>
+  </head>
+  <body>
+    <div class="background-animation"></div>
+
+    <section class="principal">
+      <div class="container">
+        <!-- Logo/Branding Area -->
+        <div class="logo-area">
+          <div class="logo-icon">
+            <i class="fas fa-fire"></i>
+          </div>
+          <h1 class="brand-name">Baratão Assados</h1>
+        </div>
+
+        <div class="login-card">
+          <h2>Bem-vindo de volta!</h2>
+          <p class="subtitle">Faça seu login para continuar</p>
+
+          <form class="formulario" action="#" method="post" novalidate>
+            <div class="input-group">
+              <div class="input-wrapper">
+                <i class="fas fa-user icon-input"></i>
+                <input
+                  type="text"
+                  id="cpf"
+                  name="cpf"
+                  placeholder="Digite seu CPF"
+                  inputmode="numeric"
+                  maxlength="14"
+                  required
+                />
+              </div>
+            </div>
+
+            <div class="input-group">
+              <div class="input-wrapper">
+                <i class="fas fa-lock icon-input"></i>
+                <input
+                  type="password"
+                  id="senha"
+                  name="senha"
+                  placeholder="Digite sua senha"
+                  required
+                />
+                <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+              </div>
+            </div>
+
+            <div class="forgot-password">
+              <a href="#">Esqueceu sua senha?</a>
+            </div>
+
+            <button
+              type="button"
+              class="btn-login"
+              onclick="location.href='index.html'"
+            >
+              <span>Entrar</span>
+              <i class="fas fa-arrow-right"></i>
+            </button>
+
+            <div class="divider">
+              <span>ou</span>
+            </div>
+
+            <button
+              type="button"
+              class="btn-register"
+              data-action="go-to-register"
+            >
+              <i class="fas fa-user-plus"></i>
+              Criar nova conta
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Seção de Contatos Modernizada -->
+      <div class="contatos-section">
+        <p class="contatos-title">Onde nos encontrar</p>
+        <div class="contatos">
+          <a
+            href="https://www.instagram.com/barataoassados/"
+            target="_blank"
+            rel="noopener"
+            class="social-link instagram"
+          >
+            <i class="fab fa-instagram"></i>
+            <span>Instagram</span>
+          </a>
+          <a
+            href="https://wa.me/5500000000000"
+            target="_blank"
+            rel="noopener"
+            class="social-link whatsapp"
+          >
+            <i class="fab fa-whatsapp"></i>
+            <span>WhatsApp</span>
+          </a>
+          <a
+            href="https://wa.me/5500000000000"
+            target="_blank"
+            rel="noopener"
+            class="social-link location"
+          >
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Localização</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <script>
+      // ==================== MÓDULO DE NAVEGAÇÃO ====================
+      const NavigationModule = (() => {
+        "use strict";
+
+        /**
+         * Redireciona para a página de registro
+         */
+        const goToRegister = () => {
+          try {
+            window.location.href = "registro.html";
+          } catch (error) {
+            console.error("Erro ao navegar para registro:", error);
+            // Fallback: tentar caminhos alternativos
+            const possiblePaths = [
+              "registro.html",
+              "./registro.html",
+              "../registro.html",
+              "register.html",
+            ];
+
+            // Tenta o primeiro caminho alternativo
+            window.location.href = possiblePaths[0];
+          }
+        };
+
+        /**
+         * Redireciona para a página inicial após login
+         */
+        const goToHome = () => {
+          try {
+            window.location.href = "index.html";
+          } catch (error) {
+            console.error("Erro ao navegar para home:", error);
+            window.location.href = "/";
+          }
+        };
+
+        // API pública
+        return {
+          goToRegister,
+          goToHome,
+        };
+      })();
+
+      // ==================== MÓDULO DE VALIDAÇÃO ====================
+      const ValidationModule = (() => {
+        "use strict";
+
+        /**
+         * Valida CPF usando algoritmo oficial
+         * @param {string} cpf - CPF a ser validado
+         * @returns {boolean} True se CPF for válido
+         */
+        const validateCPF = (cpf) => {
+          // Remove caracteres não numéricos
+          cpf = cpf.replace(/\D/g, "");
+
+          // Verifica se tem 11 dígitos
+          if (cpf.length !== 11) return false;
+
+          // Verifica se todos os dígitos são iguais
+          if (/^(\d)\1{10}$/.test(cpf)) return false;
+
+          // Validação dos dígitos verificadores
+          let sum = 0;
+          for (let i = 0; i < 9; i++) {
+            sum += parseInt(cpf.charAt(i)) * (10 - i);
+          }
+
+          let remainder = (sum * 10) % 11;
+          if (remainder === 10 || remainder === 11) remainder = 0;
+          if (remainder !== parseInt(cpf.charAt(9))) return false;
+
+          sum = 0;
+          for (let i = 0; i < 10; i++) {
+            sum += parseInt(cpf.charAt(i)) * (11 - i);
+          }
+
+          remainder = (sum * 10) % 11;
+          if (remainder === 10 || remainder === 11) remainder = 0;
+          if (remainder !== parseInt(cpf.charAt(10))) return false;
+
+          return true;
+        };
+
+        /**
+         * Valida se a senha atende aos critérios mínimos
+         * @param {string} password - Senha a ser validada
+         * @returns {Object} Objeto com resultado e mensagem
+         */
+        const validatePassword = (password) => {
+          const minLength = 6;
+          const hasNumber = /\d/.test(password);
+          const hasLetter = /[a-zA-Z]/.test(password);
+
+          if (password.length < minLength) {
+            return {
+              valid: false,
+              message: `Senha deve ter pelo menos ${minLength} caracteres`,
+            };
+          }
+
+          if (!hasNumber || !hasLetter) {
+            return {
+              valid: false,
+              message: "Senha deve conter pelo menos uma letra e um número",
+            };
+          }
+
+          return {
+            valid: true,
+            message: "Senha válida",
+          };
+        };
+
+        // API pública
+        return {
+          validateCPF,
+          validatePassword,
+        };
+      })();
+
+      // ==================== MÓDULO DE NOTIFICAÇÕES ====================
+      const NotificationModule = (() => {
+        "use strict";
+
+        /**
+         * Exibe notificação simples (pode ser expandido no futuro)
+         * @param {string} message - Mensagem a ser exibida
+         * @param {string} type - Tipo da notificação (success, error, warning)
+         */
+        const show = (message, type = "info") => {
+          // Por enquanto usa alert, mas pode ser melhorado com toast notifications
+          if (type === "error") {
+            alert(`Erro: ${message}`);
+          } else if (type === "success") {
+            alert(`Sucesso: ${message}`);
+          } else {
+            alert(message);
+          }
+        };
+
+        // API pública
+        return {
+          show,
+          error: (message) => show(message, "error"),
+          success: (message) => show(message, "success"),
+          warning: (message) => show(message, "warning"),
+        };
+      })();
+
+      // ==================== MÓDULO DE INTERFACE ====================
+      const UIModule = (() => {
+        "use strict";
+
+        /**
+         * Configura a funcionalidade de toggle da senha
+         */
+        const setupPasswordToggle = () => {
+          const toggleButton = document.getElementById("togglePassword");
+          const passwordInput = document.getElementById("senha");
+
+          if (toggleButton && passwordInput) {
+            toggleButton.addEventListener("click", function () {
+              const type =
+                passwordInput.getAttribute("type") === "password"
+                  ? "text"
+                  : "password";
+              passwordInput.setAttribute("type", type);
+              this.classList.toggle("fa-eye");
+              this.classList.toggle("fa-eye-slash");
+            });
+          }
+        };
+
+        /**
+         * Configura a formatação do CPF
+         */
+        const setupCPFFormatting = () => {
+          const cpfInput = document.getElementById("cpf");
+
+          if (cpfInput) {
+            cpfInput.addEventListener("input", function (e) {
+              let value = e.target.value.replace(/\D/g, "");
+              if (value.length > 11) value = value.slice(0, 11);
+              value = value.replace(
+                /(\d{3})(\d{3})(\d{3})(\d{2})/,
+                "$1.$2.$3-$4"
+              );
+              e.target.value = value;
+            });
+          }
+        };
+
+        /**
+         * Configura as animações de foco dos inputs
+         */
+        const setupInputAnimations = () => {
+          document.querySelectorAll(".input-wrapper input").forEach((input) => {
+            input.addEventListener("focus", function () {
+              this.parentElement.classList.add("focused");
+            });
+
+            input.addEventListener("blur", function () {
+              if (!this.value) {
+                this.parentElement.classList.remove("focused");
+              }
+            });
+          });
+        };
+
+        /**
+         * Configura os event listeners globais
+         */
+        const setupGlobalEventListeners = () => {
+          document.addEventListener("click", function (event) {
+            const target = event.target.closest("[data-action]");
+            if (!target) return;
+
+            const action = target.dataset.action;
+
+            // Prevenir comportamento padrão para botões
+            if (target.tagName === "BUTTON") {
+              event.preventDefault();
+            }
+
+            // Roteamento de ações
+            switch (action) {
+              case "go-to-register":
+                NavigationModule.goToRegister();
+                break;
+              default:
+                console.warn(`Ação não reconhecida: ${action}`);
+            }
+          });
+        };
+
+        /**
+         * Valida o formulário de login
+         * @returns {boolean} True se formulário for válido
+         */
+        const validateLoginForm = () => {
+          const cpfInput = document.getElementById("cpf");
+          const senhaInput = document.getElementById("senha");
+
+          if (!cpfInput || !senhaInput) {
+            NotificationModule.error("Campos do formulário não encontrados");
+            return false;
+          }
+
+          const cpf = cpfInput.value.trim();
+          const senha = senhaInput.value.trim();
+
+          // Validação básica de campos vazios
+          if (!cpf || !senha) {
+            NotificationModule.error("Por favor, preencha todos os campos");
+            return false;
+          }
+
+          // Validação do CPF
+          if (!ValidationModule.validateCPF(cpf)) {
+            NotificationModule.error("CPF inválido");
+            cpfInput.focus();
+            return false;
+          }
+
+          // Validação da senha
+          const passwordValidation = ValidationModule.validatePassword(senha);
+          if (!passwordValidation.valid) {
+            NotificationModule.error(passwordValidation.message);
+            senhaInput.focus();
+            return false;
+          }
+
+          return true;
+        };
+
+        // API pública
+        return {
+          setupPasswordToggle,
+          setupCPFFormatting,
+          setupInputAnimations,
+          setupGlobalEventListeners,
+          validateLoginForm,
+        };
+      })();
+
+      // ==================== MÓDULO PRINCIPAL ====================
+      const App = (() => {
+        "use strict";
+
+        /**
+         * Processa o login do usuário
+         */
+        const processLogin = () => {
+          if (UIModule.validateLoginForm()) {
+            // Aqui você pode adicionar a lógica de autenticação real
+            // Por enquanto, apenas simula um login bem-sucedido
+            NotificationModule.success("Login realizado com sucesso!");
+
+            // Pequeno delay para mostrar a mensagem antes do redirecionamento
+            setTimeout(() => {
+              NavigationModule.goToHome();
+            }, 1000);
+          }
+        };
+
+        /**
+         * Inicializa a aplicação
+         */
+        const init = () => {
+          try {
+            // Configurar funcionalidades da interface
+            UIModule.setupPasswordToggle();
+            UIModule.setupCPFFormatting();
+            UIModule.setupInputAnimations();
+            UIModule.setupGlobalEventListeners();
+
+            // Configurar o botão de login para usar a validação
+            const loginButton = document.querySelector(".btn-login");
+            if (loginButton) {
+              // Remove o onclick inline e adiciona event listener
+              loginButton.removeAttribute("onclick");
+              loginButton.addEventListener("click", processLogin);
+            }
+
+            console.log("🚀 Página de Login inicializada com sucesso!");
+          } catch (error) {
+            console.error("❌ Erro na inicialização do Login:", error);
+            NotificationModule.error(
+              "Erro ao carregar a página. Tente recarregar."
+            );
+          }
+        };
+
+        // API pública
+        return {
+          init,
+          processLogin,
+        };
+      })();
+
+      // ==================== INICIALIZAÇÃO ====================
+      document.addEventListener("DOMContentLoaded", App.init);
+
+      // Exportar módulos para debug (apenas em desenvolvimento)
+      if (
+        typeof window !== "undefined" &&
+        window.location.hostname === "localhost"
+      ) {
+        window.DebugModules = {
+          Navigation: NavigationModule,
+          Validation: ValidationModule,
+          Notification: NotificationModule,
+          UI: UIModule,
+          App,
+        };
+      }
+    </script>
+  </body>
+</html>

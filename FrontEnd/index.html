@@ -1,0 +1,1038 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Baratão Assados - Home</title>
+    <link rel="stylesheet" href="style_index.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="background-animation"></div>
+
+    <section class="principal">
+      <!-- Header com Logo e Saudação -->
+      <div class="header-section">
+        <div class="logo-container">
+          <div class="logo-icon">
+            <i class="fas fa-fire"></i>
+          </div>
+          <div class="logo-text">
+            <h1>Baratão Assados</h1>
+            <p class="logo-subtitle">Sabor que conquista!</p>
+          </div>
+        </div>
+
+        <div class="user-welcome">
+          <i class="fas fa-user-circle"></i>
+          <span>Olá, bem-vindo!</span>
+          <button
+            class="btn-logout"
+            data-action="logout"
+            aria-label="Sair da conta"
+          >
+            <i class="fas fa-sign-out-alt"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Status do Estabelecimento -->
+      <div class="status-card">
+        <div class="status-info">
+          <div class="status-indicator">
+            <div class="status-dot" id="statusDot"></div>
+            <span class="status-text" id="statusText">Verificando...</span>
+          </div>
+          <div class="current-time" id="currentTime"></div>
+        </div>
+        <div class="available-services" id="availableServices">
+          <!-- Preenchido dinamicamente pelo JS -->
+        </div>
+      </div>
+
+      <!-- Menu de Navegação Principal -->
+      <div class="main-menu">
+        <div class="menu-grid">
+          <!-- CARD UNIFICADO: Cardápio & Pedidos -->
+          <div class="menu-card primary featured">
+            <div class="card-icon large">
+              <i class="fas fa-utensils"></i>
+            </div>
+            <div class="card-content expanded">
+              <h3>Cardápio & Pedidos</h3>
+              <p class="card-description">
+                Explore nossos pratos e faça seu pedido
+              </p>
+
+              <!-- Status dos menus disponíveis -->
+              <div class="available-menus" id="availableMenus">
+                <!-- Será preenchido dinamicamente pelo JS -->
+              </div>
+
+              <!-- Quick features -->
+              <div class="quick-features">
+                <div class="feature-item">
+                  <i class="fas fa-eye"></i>
+                  <span>Ver Cardápio</span>
+                </div>
+                <div class="feature-item">
+                  <i class="fas fa-shopping-cart"></i>
+                  <span>Fazer Pedido</span>
+                </div>
+                <div class="feature-item">
+                  <i class="fas fa-clock"></i>
+                  <span>Entrega Rápida</span>
+                </div>
+              </div>
+
+              <!-- Categorias principais -->
+              <div class="categories-preview">
+                <div class="category-tag">
+                  <i class="fas fa-fire"></i>
+                  <span>Assados</span>
+                </div>
+                <div class="category-tag">
+                  <i class="fas fa-cow"></i>
+                  <span>Bovino</span>
+                </div>
+                <div class="category-tag">
+                  <i class="fas fa-drumstick-bite"></i>
+                  <span>Frango</span>
+                </div>
+                <div class="category-tag">
+                  <i class="fas fa-glass-cheers"></i>
+                  <span>Bebidas</span>
+                </div>
+              </div>
+            </div>
+            <button
+              class="btn-card featured"
+              data-action="open-menu"
+              aria-label="Abrir Cardápio e Fazer Pedido"
+              id="btnOpenMenu"
+            >
+              <span id="btnMenuText">Abrir Cardápio</span>
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <!-- Meus Pedidos -->
+          <div class="menu-card info">
+            <div class="card-icon">
+              <i class="fas fa-list-alt"></i>
+            </div>
+            <div class="card-content">
+              <h3>Meus Pedidos</h3>
+              <p>Acompanhe o status dos seus pedidos</p>
+              <div class="order-summary">
+                <span class="summary-item">
+                  <i class="fas fa-truck"></i>
+                  Entregas ativas
+                </span>
+                <span class="summary-item">
+                  <i class="fas fa-history"></i>
+                  Histórico completo
+                </span>
+              </div>
+            </div>
+            <button
+              class="btn-card"
+              data-action="show-my-orders"
+              aria-label="Consultar Meus Pedidos"
+            >
+              <span>Consultar Pedidos</span>
+              <i class="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Seção de Contatos Modernizada -->
+      <div class="contatos-section">
+        <p class="contatos-title">Onde nos encontrar</p>
+        <div class="contatos">
+          <a
+            href="https://www.instagram.com/barataoassados/"
+            target="_blank"
+            rel="noopener"
+            class="social-link instagram"
+          >
+            <i class="fab fa-instagram"></i>
+            <span>Instagram</span>
+          </a>
+          <a
+            href="https://wa.me/5500000000000"
+            target="_blank"
+            rel="noopener"
+            class="social-link whatsapp"
+          >
+            <i class="fab fa-whatsapp"></i>
+            <span>WhatsApp</span>
+          </a>
+          <a
+            href="https://wa.me/5500000000000"
+            target="_blank"
+            rel="noopener"
+            class="social-link location"
+          >
+            <i class="fas fa-map-marker-alt"></i>
+            <span>Localização</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal de Estabelecimento Fechado -->
+    <div
+      id="modalEstabelecimentoFechado"
+      class="modal"
+      role="dialog"
+      aria-labelledby="modal-closed-title"
+      aria-hidden="true"
+    >
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 id="modal-closed-title">
+            <i class="fas fa-store-slash"></i>
+            Serviço Indisponível
+          </h2>
+          <button
+            class="close-btn"
+            data-action="close-closed-modal"
+            aria-label="Fechar modal"
+          >
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="closed-info">
+            <div class="closed-icon">
+              <i class="fas fa-clock"></i>
+            </div>
+            <h3>Serviço indisponível no momento</h3>
+            <p>Consulte nossos horários de funcionamento abaixo:</p>
+
+            <div class="schedule-info">
+              <h4><i class="fas fa-calendar-alt"></i> Nossos Horários:</h4>
+              <div class="schedule-list">
+                <div class="schedule-item">
+                  <strong>Almoço:</strong>
+                  <div class="schedule-details">
+                    <span>Quinta-feira, Domingo e Feriados</span>
+                    <span class="time-info">11:00 às 15:00</span>
+                  </div>
+                </div>
+                <div class="schedule-item">
+                  <strong>Assados Básicos:</strong>
+                  <div class="schedule-details">
+                    <span>Quinta e Sexta-feira</span>
+                    <span class="time-info">18:00 às 22:00</span>
+                  </div>
+                </div>
+                <div class="schedule-item">
+                  <strong>Assados Completos:</strong>
+                  <div class="schedule-details">
+                    <span>Sábado, Domingo e Feriados</span>
+                    <span class="time-info">18:00 às 22:00</span>
+                  </div>
+                </div>
+                <div class="schedule-item">
+                  <strong>Jantinha:</strong>
+                  <div class="schedule-details">
+                    <span>Quarta a Sexta-feira</span>
+                    <span class="time-info">18:00 às 22:00</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="current-status" id="currentStatusInfo">
+              <!-- Será preenchido dinamicamente -->
+            </div>
+
+            <div class="contact-info">
+              <p>
+                <i class="fas fa-info-circle"></i> Para mais informações, entre
+                em contato conosco através dos nossos canais!
+              </p>
+            </div>
+
+            <div class="modal-actions">
+              <button class="btn-close-modal" data-action="close-closed-modal">
+                <i class="fas fa-times"></i>
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Área de notificações -->
+    <div
+      id="notificationArea"
+      class="notification-area"
+      aria-live="polite"
+    ></div>
+
+    <script>
+      // js/home.js - Aplicação principal da página HOME
+
+      /**
+       * Página HOME - Baratão Assados
+       * Arquitetura: Module Pattern + Observer Pattern
+       * Desenvolvido com ES6+ e princípios SOLID
+       */
+
+      // ==================== MÓDULO DE DISPONIBILIDADE ====================
+      const AvailabilityModule = (() => {
+        "use strict";
+
+        /**
+         * Verifica se uma data é feriado nacional brasileiro.
+         * @param {Date} date - A data a ser verificada.
+         * @returns {boolean} True se for feriado, false caso contrário.
+         */
+        const isHoliday = (date) => {
+          const year = date.getFullYear();
+          const month = date.getMonth() + 1; // getMonth() retorna 0-11
+          const day = date.getDate();
+
+          // Feriados fixos
+          const fixedHolidays = [
+            { month: 1, day: 1 }, // Ano Novo
+            { month: 4, day: 21 }, // Tiradentes
+            { month: 5, day: 1 }, // Dia do Trabalho
+            { month: 9, day: 7 }, // Independência do Brasil
+            { month: 10, day: 12 }, // Nossa Senhora Aparecida
+            { month: 11, day: 2 }, // Finados
+            { month: 11, day: 15 }, // Proclamação da República
+            { month: 12, day: 25 }, // Natal
+          ];
+
+          return fixedHolidays.some(
+            (holiday) => holiday.month === month && holiday.day === day
+          );
+        };
+
+        /**
+         * Verifica se um horário está dentro de um intervalo.
+         * @param {number} currentHour - Hora atual (0-23).
+         * @param {number} currentMinute - Minuto atual (0-59).
+         * @param {string} startTime - Horário de início (formato "HH:MM").
+         * @param {string} endTime - Horário de fim (formato "HH:MM").
+         * @returns {boolean} True se estiver dentro do horário, false caso contrário.
+         */
+        const isWithinTimeRange = (
+          currentHour,
+          currentMinute,
+          startTime,
+          endTime
+        ) => {
+          const [startHour, startMin] = startTime.split(":").map(Number);
+          const [endHour, endMin] = endTime.split(":").map(Number);
+
+          const currentTotalMinutes = currentHour * 60 + currentMinute;
+          const startTotalMinutes = startHour * 60 + startMin;
+          const endTotalMinutes = endHour * 60 + endMin;
+
+          return (
+            currentTotalMinutes >= startTotalMinutes &&
+            currentTotalMinutes < endTotalMinutes
+          );
+        };
+
+        /**
+         * Determina quais serviços estão disponíveis baseado no dia da semana, horário e se é feriado.
+         * @param {Date} [date=new Date()] - A data para verificar disponibilidade.
+         * @returns {Object} Objeto com os serviços disponíveis e suas configurações.
+         */
+        const getAvailableServices = (date = new Date()) => {
+          const dayOfWeek = date.getDay(); // 0 = Domingo, 1 = Segunda, ..., 6 = Sábado
+          const currentHour = date.getHours();
+          const currentMinute = date.getMinutes();
+          const isHolidayToday = isHoliday(date);
+
+          const services = {
+            almoco: {
+              name: "Almoço",
+              icon: "fas fa-sun",
+              available: false,
+              description: "Cardápio completo de almoço",
+              schedule: "Quinta-feira, Domingo e Feriados (11:00 às 15:00)",
+            },
+            assados: {
+              name: "Assados",
+              icon: "fas fa-fire",
+              available: false,
+              type: null, // 'basico' ou 'completo'
+              description: "",
+              schedule: "",
+            },
+            jantinha: {
+              name: "Jantinha",
+              icon: "fas fa-moon",
+              available: false,
+              description: "Opções para o final do dia",
+              schedule: "Quarta a Sexta-feira (18:00 às 22:00)",
+            },
+          };
+
+          // Lógica de disponibilidade baseada nas regras fornecidas:
+
+          // ALMOÇO - Quinta, Domingo e Feriados (11:00 às 15:00)
+          if (
+            (dayOfWeek === 4 || dayOfWeek === 0 || isHolidayToday) &&
+            isWithinTimeRange(currentHour, currentMinute, "11:00", "15:00")
+          ) {
+            services.almoco.available = true;
+          }
+
+          // ASSADOS - Quinta e Sexta (básico), Sábado, Domingo e Feriado (completo) - 18:00 às 22:00
+          if (
+            (dayOfWeek === 4 || dayOfWeek === 5) &&
+            isWithinTimeRange(currentHour, currentMinute, "18:00", "22:00")
+          ) {
+            // Quinta e Sexta
+            services.assados.available = true;
+            services.assados.type = "basico";
+            services.assados.name = "Assados Básicos";
+            services.assados.description = "Seleção básica de assados";
+            services.assados.schedule = "Quinta e Sexta-feira (18:00 às 22:00)";
+          } else if (
+            (dayOfWeek === 6 || dayOfWeek === 0 || isHolidayToday) &&
+            isWithinTimeRange(currentHour, currentMinute, "18:00", "22:00")
+          ) {
+            // Sábado, Domingo e Feriados
+            services.assados.available = true;
+            services.assados.type = "completo";
+            services.assados.name = "Assados Completos";
+            services.assados.description = "Cardápio completo de assados";
+            services.assados.schedule =
+              "Sábado, Domingo e Feriados (18:00 às 22:00)";
+          }
+
+          // JANTINHA - Quarta a Sexta (18:00 às 22:00)
+          if (
+            dayOfWeek >= 3 &&
+            dayOfWeek <= 5 &&
+            isWithinTimeRange(currentHour, currentMinute, "18:00", "22:00")
+          ) {
+            // Quarta (3), Quinta (4), Sexta (5)
+            services.jantinha.available = true;
+          }
+
+          return services;
+        };
+
+        /**
+         * Retorna informações sobre o status atual do estabelecimento.
+         * @param {Date} [date=new Date()] - A data para verificar o status.
+         * @returns {Object} Objeto com informações de status.
+         */
+        const getStatus = (date = new Date()) => {
+          const services = getAvailableServices(date);
+          const hasAnyService = Object.values(services).some(
+            (service) => service.available
+          );
+
+          return {
+            isOpen: hasAnyService,
+            message: hasAnyService ? "Aberto agora" : "Fechado no momento",
+            services: services,
+            currentTime: date.toLocaleTimeString("pt-BR", {
+              hour: "2-digit",
+              minute: "2-digit",
+            }),
+            currentDay: date.toLocaleDateString("pt-BR", { weekday: "long" }),
+          };
+        };
+
+        /**
+         * Retorna o próximo horário de funcionamento.
+         * @param {Date} [date=new Date()] - A data para verificar.
+         * @returns {string} Informação sobre o próximo funcionamento.
+         */
+        const getNextAvailableTime = (date = new Date()) => {
+          const dayNames = [
+            "Domingo",
+            "Segunda",
+            "Terça",
+            "Quarta",
+            "Quinta",
+            "Sexta",
+            "Sábado",
+          ];
+          const currentDay = date.getDay();
+          const currentHour = date.getHours();
+
+          // Verifica se ainda há serviços hoje
+          const today = new Date(date);
+          if (currentHour < 22) {
+            // Verifica próximos serviços hoje
+            if (currentDay === 4 && currentHour < 11) {
+              // Quinta antes das 11h
+              return "Almoço disponível hoje às 11:00";
+            }
+            if (currentDay === 0 && currentHour < 11) {
+              // Domingo antes das 11h
+              return "Almoço disponível hoje às 11:00";
+            }
+            if (currentDay >= 3 && currentDay <= 5 && currentHour < 18) {
+              // Quarta-Sexta antes das 18h
+              return "Serviços disponíveis hoje às 18:00";
+            }
+            if ((currentDay === 6 || currentDay === 0) && currentHour < 18) {
+              // Sábado/Domingo antes das 18h
+              return "Assados Completos disponíveis hoje às 18:00";
+            }
+          }
+
+          // Próximo dia com serviço
+          if (currentDay >= 0 && currentDay <= 2) {
+            // Domingo-Terça
+            return "Próximo funcionamento: Quarta-feira às 18:00";
+          } else if (currentDay === 6) {
+            // Sábado
+            return "Próximo funcionamento: Domingo às 11:00";
+          } else {
+            return "Consulte nossos horários de funcionamento";
+          }
+        };
+
+        // API pública do módulo de disponibilidade
+        return {
+          getAvailableServices,
+          getStatus,
+          getNextAvailableTime,
+          isHoliday,
+        };
+      })();
+
+      // ==================== MÓDULO DE NAVEGAÇÃO ====================
+      const NavigationModule = (() => {
+        "use strict";
+
+        /**
+         * Abre a página do cardápio se o estabelecimento estiver funcionando.
+         * Caso contrário, exibe modal informativo.
+         */
+        const openCardapio = () => {
+          const status = AvailabilityModule.getStatus();
+
+          if (status.isOpen) {
+            // Estabelecimento aberto - redireciona para o cardápio
+            window.location.href = "cardapio.html";
+          } else {
+            // Estabelecimento fechado - exibe modal informativo
+            showClosedModal();
+          }
+        };
+
+        /**
+         * Exibe o modal informando que o estabelecimento está fechado.
+         */
+        const showClosedModal = () => {
+          const modal = document.querySelector("#modalEstabelecimentoFechado");
+          if (modal) {
+            // Atualiza informações do status atual no modal
+            updateModalCurrentStatus();
+
+            modal.style.display = "flex";
+            modal.setAttribute("aria-hidden", "false");
+
+            // Impede o scroll da página de fundo
+            document.body.style.overflow = "hidden";
+          }
+        };
+
+        /**
+         * Atualiza as informações de status atual no modal.
+         */
+        const updateModalCurrentStatus = () => {
+          const statusInfoElement =
+            document.querySelector("#currentStatusInfo");
+          if (!statusInfoElement) return;
+
+          const status = AvailabilityModule.getStatus();
+          const nextAvailable = AvailabilityModule.getNextAvailableTime();
+
+          statusInfoElement.innerHTML = `
+            <div class="current-info">
+              <h4><i class="fas fa-info-circle"></i> Status Atual:</h4>
+              <div class="status-details">
+                <p><strong>Agora:</strong> ${status.currentTime} - ${status.currentDay}</p>
+                <p><strong>Status:</strong> ${status.message}</p>
+                <p><strong>Próximo funcionamento:</strong> ${nextAvailable}</p>
+              </div>
+            </div>
+          `;
+        };
+
+        /**
+         * Fecha o modal de estabelecimento fechado.
+         */
+        const closeClosedModal = () => {
+          const modal = document.querySelector("#modalEstabelecimentoFechado");
+          if (modal) {
+            modal.style.display = "none";
+            modal.setAttribute("aria-hidden", "true");
+
+            // Restaura o scroll da página
+            document.body.style.overflow = "auto";
+          }
+        };
+
+        // API pública do módulo de navegação
+        return {
+          openCardapio,
+          showClosedModal,
+          closeClosedModal,
+        };
+      })();
+
+      // ==================== MÓDULO DE DADOS ====================
+      const DataModule = (() => {
+        "use strict";
+
+        // Configurações da aplicação
+        const CONFIG = {
+          UPDATE_TIME_INTERVAL: 60000, // 1 minuto
+          SCHEDULE_ADVANCE_PERCENTAGE: 0.45, // 45% a 50%
+        };
+
+        // API pública do módulo
+        return {
+          CONFIG,
+        };
+      })();
+
+      // ==================== MÓDULO DE UTILITÁRIOS ====================
+      const UtilsModule = (() => {
+        "use strict";
+
+        /**
+         * Formata valores monetários para o padrão brasileiro
+         * @param {number} value - Valor a ser formatado
+         * @returns {string} Valor formatado (ex: "R$ 10,50")
+         */
+        const formatCurrency = (value) => {
+          return `R$ ${value.toFixed(2).replace(".", ",")}`;
+        };
+
+        /**
+         * Formata hora para o padrão brasileiro
+         * @param {Date} date - Data a ser formatada
+         * @returns {string} Hora formatada (ex: "14:30")
+         */
+        const formatTime = (date = new Date()) => {
+          return date.toLocaleTimeString("pt-BR", {
+            hour: "2-digit",
+            minute: "2-digit",
+          });
+        };
+
+        /**
+         * Sanitiza entrada de texto para evitar XSS
+         * @param {string} text - Texto a ser sanitizado
+         * @returns {string} Texto seguro
+         */
+        const sanitizeText = (text) => {
+          const div = document.createElement("div");
+          div.textContent = text;
+          return div.innerHTML;
+        };
+
+        /**
+         * Debounce para otimizar performance
+         * @param {Function} func - Função a ser executada
+         * @param {number} wait - Tempo de espera em ms
+         * @returns {Function} Função com debounce
+         */
+        const debounce = (func, wait) => {
+          let timeout;
+          return function executedFunction(...args) {
+            const later = () => {
+              clearTimeout(timeout);
+              func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+          };
+        };
+
+        /**
+         * Valida se um elemento existe no DOM
+         * @param {string} selector - Seletor CSS
+         * @returns {Element|null} Elemento ou null
+         */
+        const getElement = (selector) => {
+          const element = document.querySelector(selector);
+          if (!element) {
+            console.warn(`Elemento não encontrado: ${selector}`);
+          }
+          return element;
+        };
+
+        /**
+         * Cria elemento DOM com atributos
+         * @param {string} tag - Tag HTML
+         * @param {Object} attributes - Atributos do elemento
+         * @param {string} content - Conteúdo interno
+         * @returns {Element} Elemento criado
+         */
+        const createElement = (tag, attributes = {}, content = "") => {
+          const element = document.createElement(tag);
+
+          Object.entries(attributes).forEach(([key, value]) => {
+            if (key === "className") {
+              element.className = value;
+            } else if (key === "dataset") {
+              Object.entries(value).forEach(([dataKey, dataValue]) => {
+                element.dataset[dataKey] = dataValue;
+              });
+            } else {
+              element.setAttribute(key, value);
+            }
+          });
+
+          if (content) {
+            element.innerHTML = content;
+          }
+
+          return element;
+        };
+
+        // API pública
+        return {
+          formatCurrency,
+          formatTime,
+          sanitizeText,
+          debounce,
+          getElement,
+          createElement,
+        };
+      })();
+
+      // ==================== MÓDULO DE NOTIFICAÇÕES ====================
+      const NotificationModule = (() => {
+        "use strict";
+
+        const NOTIFICATION_TYPES = {
+          SUCCESS: "success",
+          ERROR: "error",
+          INFO: "info",
+          WARNING: "warning",
+        };
+
+        /**
+         * Exibe notificação para o usuário
+         * @param {string} message - Mensagem a ser exibida
+         * @param {string} type - Tipo da notificação
+         * @param {number} duration - Duração em ms
+         */
+        const show = (
+          message,
+          type = NOTIFICATION_TYPES.INFO,
+          duration = 3000
+        ) => {
+          const notificationArea = UtilsModule.getElement("#notificationArea");
+          if (!notificationArea) return;
+
+          const notification = UtilsModule.createElement(
+            "div",
+            {
+              className: `notification notification--${type}`,
+              "aria-live": "polite",
+            },
+            `
+            <div class="notification__content">
+                <i class="notification__icon ${getIconForType(type)}"></i>
+                <span class="notification__message">${UtilsModule.sanitizeText(
+                  message
+                )}</span>
+            </div>
+        `
+          );
+
+          notificationArea.appendChild(notification);
+
+          // Auto remoção
+          setTimeout(() => {
+            notification.classList.add("notification--removing");
+            setTimeout(() => notification.remove(), 300);
+          }, duration);
+        };
+
+        /**
+         * Obtém ícone apropriado para o tipo de notificação
+         * @param {string} type - Tipo da notificação
+         * @returns {string} Classe do ícone
+         */
+        const getIconForType = (type) => {
+          const icons = {
+            [NOTIFICATION_TYPES.SUCCESS]: "fas fa-check-circle",
+            [NOTIFICATION_TYPES.ERROR]: "fas fa-exclamation-circle",
+            [NOTIFICATION_TYPES.INFO]: "fas fa-info-circle",
+            [NOTIFICATION_TYPES.WARNING]: "fas fa-exclamation-triangle",
+          };
+          return icons[type] || icons[NOTIFICATION_TYPES.INFO];
+        };
+
+        // Métodos de conveniência
+        return {
+          show,
+          success: (message, duration) =>
+            show(message, NOTIFICATION_TYPES.SUCCESS, duration),
+          error: (message, duration) =>
+            show(message, NOTIFICATION_TYPES.ERROR, duration),
+          info: (message, duration) =>
+            show(message, NOTIFICATION_TYPES.INFO, duration),
+          warning: (message, duration) =>
+            show(message, NOTIFICATION_TYPES.WARNING, duration),
+          TYPES: NOTIFICATION_TYPES,
+        };
+      })();
+
+      // ==================== MÓDULO DE UI ====================
+      const UIModule = (() => {
+        "use strict";
+
+        /**
+         * Atualiza horário atual
+         */
+        const updateCurrentTime = () => {
+          const timeElement = UtilsModule.getElement("#currentTime");
+          if (timeElement) {
+            timeElement.textContent = UtilsModule.formatTime();
+          }
+        };
+
+        /**
+         * Atualiza status e serviços disponíveis
+         */
+        const updateAvailableServices = () => {
+          const servicesContainer =
+            UtilsModule.getElement("#availableServices");
+          const statusDot = UtilsModule.getElement("#statusDot");
+          const statusText = UtilsModule.getElement("#statusText");
+
+          if (!servicesContainer || !statusDot || !statusText) return;
+
+          const status = AvailabilityModule.getStatus();
+          const availableServices = Object.values(status.services).filter(
+            (service) => service.available
+          );
+
+          // Atualiza status do estabelecimento
+          statusDot.className = `status-dot ${
+            status.isOpen ? "status-open" : "status-closed"
+          }`;
+          statusText.textContent = status.message;
+
+          // Atualiza serviços disponíveis
+          if (availableServices.length === 0) {
+            servicesContainer.innerHTML = `
+              <span class="service-tag unavailable">
+                <i class="fas fa-times-circle"></i>
+                Nenhum serviço disponível
+              </span>
+            `;
+          } else {
+            servicesContainer.innerHTML = availableServices
+              .map(
+                (service) => `
+                <span class="service-tag available">
+                  <i class="${service.icon}"></i>
+                  ${service.name}
+                </span>
+              `
+              )
+              .join("");
+          }
+        };
+
+        /**
+         * Atualiza menus disponíveis no card principal
+         */
+        const updateAvailableMenus = () => {
+          const menuContainer = UtilsModule.getElement("#availableMenus");
+          const btnOpenMenu = UtilsModule.getElement("#btnOpenMenu");
+          const btnMenuText = UtilsModule.getElement("#btnMenuText");
+
+          if (!menuContainer || !btnOpenMenu || !btnMenuText) return;
+
+          const status = AvailabilityModule.getStatus();
+          const availableServices = Object.values(status.services).filter(
+            (service) => service.available
+          );
+
+          if (availableServices.length === 0) {
+            const nextAvailable = AvailabilityModule.getNextAvailableTime();
+            menuContainer.innerHTML = `
+              <span class="unavailable-tag">
+                <i class="fas fa-clock"></i>
+                Fora do horário de funcionamento
+              </span>
+              <div class="next-available">
+                <small><i class="fas fa-info-circle"></i> ${nextAvailable}</small>
+              </div>
+            `;
+            btnOpenMenu.classList.add("disabled");
+            btnMenuText.textContent = "Indisponível";
+          } else {
+            menuContainer.innerHTML = availableServices
+              .map(
+                (service) => `
+                <span class="available-tag">
+                  <i class="fas fa-check"></i>
+                  ${service.name}
+                </span>
+              `
+              )
+              .join("");
+            btnOpenMenu.classList.remove("disabled");
+            btnMenuText.textContent = "Abrir Cardápio";
+          }
+        };
+
+        // API pública
+        return {
+          updateCurrentTime,
+          updateAvailableServices,
+          updateAvailableMenus,
+        };
+      })();
+
+      // ==================== MÓDULO PRINCIPAL ====================
+      const App = (() => {
+        "use strict";
+
+        /**
+         * Gerenciador central de eventos
+         * @param {Event} event - Evento capturado
+         */
+        const handleGlobalClick = (event) => {
+          const target = event.target.closest("[data-action]");
+          if (!target) return;
+
+          const action = target.dataset.action;
+
+          // Prevenir comportamento padrão para botões
+          if (target.tagName === "BUTTON") {
+            event.preventDefault();
+          }
+
+          // Roteamento de ações
+          switch (action) {
+            case "logout":
+              NotificationModule.info("Saindo da conta...");
+              // window.location.href = "login.html"; // Futuro redirecionamento
+              break;
+
+            case "open-menu":
+              // Verifica status antes de tentar abrir
+              const status = AvailabilityModule.getStatus();
+              if (!status.isOpen) {
+                NotificationModule.warning(
+                  "Serviço indisponível, consulte o horário de funcionamento"
+                );
+              }
+              NavigationModule.openCardapio(); // Usa a nova função de navegação inteligente
+              break;
+
+            case "show-my-orders":
+              NotificationModule.info(
+                'Funcionalidade "Meus Pedidos" será implementada em breve!'
+              );
+              // window.location.href = 'meus-pedidos.html'; // Futuro redirecionamento
+              break;
+
+            case "close-closed-modal":
+              NavigationModule.closeClosedModal();
+              break;
+
+            default:
+              console.warn(`Ação não reconhecida: ${action}`);
+          }
+        };
+
+        /**
+         * Configura responsividade
+         */
+        const setupResponsive = () => {
+          const handleResize = UtilsModule.debounce(() => {
+            // Lógica de responsividade específica para a HOME, se necessário
+          }, 250);
+
+          window.addEventListener("resize", handleResize);
+          handleResize(); // Executar imediatamente
+        };
+
+        /**
+         * Inicializa a aplicação
+         */
+        const init = () => {
+          try {
+            // Renderizar interface inicial
+            UIModule.updateCurrentTime();
+            UIModule.updateAvailableServices();
+            UIModule.updateAvailableMenus();
+
+            // Configurar eventos globais
+            document.addEventListener("click", handleGlobalClick);
+
+            // Configurar responsividade
+            setupResponsive();
+
+            // Atualizar informações periodicamente
+            setInterval(() => {
+              UIModule.updateCurrentTime();
+              UIModule.updateAvailableServices();
+              UIModule.updateAvailableMenus();
+            }, DataModule.CONFIG.UPDATE_TIME_INTERVAL);
+
+            console.log("🚀 Página HOME inicializada com sucesso!");
+            NotificationModule.success("Bem-vindo ao Baratão Assados!", 2000);
+          } catch (error) {
+            console.error("❌ Erro na inicialização da HOME:", error);
+            NotificationModule.error(
+              "Erro ao carregar a página. Tente recarregar."
+            );
+          }
+        };
+
+        // API pública
+        return {
+          init,
+        };
+      })();
+
+      // ==================== INICIALIZAÇÃO ====================
+      document.addEventListener("DOMContentLoaded", App.init);
+
+      // Exportar módulos para debug (apenas em desenvolvimento)
+      if (
+        typeof window !== "undefined" &&
+        window.location.hostname === "localhost"
+      ) {
+        window.DebugModules = {
+          Availability: AvailabilityModule,
+          Navigation: NavigationModule,
+          Data: DataModule,
+          Utils: UtilsModule,
+          Notification: NotificationModule,
+          UI: UIModule,
+          App,
+        };
+      }
+    </script>
+  </body>
+</html>

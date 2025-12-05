@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="style_funcionario.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Painel de Funcionários - Baratão Assados</title>
+  </head>
+  <body>
+    <div class="background-animation"></div>
+
+    <section class="principal">
+      <!-- Header -->
+      <div class="header-funcionarios">
+        <div class="logo-container-header">
+          <div class="logo-icon-small">
+            <i class="fas fa-fire"></i>
+          </div>
+          <div class="logo-text-header">
+            <h1>Baratão Assados</h1>
+            <p>Painel de Funcionários</p>
+          </div>
+        </div>
+        <button class="btn-logout" id="btnLogout" aria-label="Sair">
+          <i class="fas fa-sign-out-alt"></i>
+          <span>Sair</span>
+        </button>
+      </div>
+
+      <!-- Status Card -->
+      <div class="status-card-funcionarios">
+        <div class="status-info">
+          <div class="status-indicator">
+            <div class="status-dot status-open"></div>
+            <span class="status-text">Loja Aberta</span>
+          </div>
+          <div class="current-time">
+            <i class="fas fa-clock"></i>
+            <span id="currentTime">00:00</span>
+          </div>
+        </div>
+        <div class="stats-funcionarios">
+          <div class="stat-box">
+            <span class="stat-number" id="totalPedidos">0</span>
+            <span class="stat-label">Total de Pedidos</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number" id="pedidosPendentes">0</span>
+            <span class="stat-label">Pendentes</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number" id="pedidosEmPreparo">0</span>
+            <span class="stat-label">Em Preparo</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-number" id="pedidosProntos">0</span>
+            <span class="stat-label">Prontos</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Filtros -->
+      <div class="filtros-funcionarios">
+        <div class="filtro-buttons">
+          <button class="filtro-btn active" data-filtro="todos">
+            <i class="fas fa-list"></i>
+            <span>Todos</span>
+          </button>
+          <button class="filtro-btn" data-filtro="pendente">
+            <i class="fas fa-clock"></i>
+            <span>Pendentes</span>
+          </button>
+          <button class="filtro-btn" data-filtro="em-preparo">
+            <i class="fas fa-fire"></i>
+            <span>Em Preparo</span>
+          </button>
+          <button class="filtro-btn" data-filtro="pronto">
+            <i class="fas fa-check"></i>
+            <span>Prontos</span>
+          </button>
+          <button class="filtro-btn" data-filtro="entregue">
+            <i class="fas fa-truck"></i>
+            <span>Entregues</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Lista de Pedidos -->
+      <div class="pedidos-container">
+        <div class="pedidos-grid" id="pedidosGrid">
+          <!-- Pedidos serão carregados aqui -->
+        </div>
+      </div>
+
+      <!-- Modal de Detalhes do Pedido -->
+      <div
+        id="modalPedido"
+        class="modal-funcionarios"
+        role="dialog"
+        aria-hidden="true"
+      >
+        <div class="modal-content-funcionarios">
+          <div class="modal-header-funcionarios">
+            <h2 id="modalTitulo">Detalhes do Pedido</h2>
+            <button class="close-btn-modal" id="closeModal" aria-label="Fechar">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div class="modal-body-funcionarios" id="modalBody">
+            <!-- Conteúdo do pedido será carregado aqui -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div
+      id="notificationArea"
+      class="notification-area"
+      aria-live="polite"
+    ></div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // ==================== MÓDULO DE DADOS ====================
+        const DataModule = (function () {
+          const MOCK_PEDIDOS = [
+            {
+              id: "#PED-001",
+              cliente: "João Silva",
+              cpf: "123.456.789-10",
+              status: "pendente",
+              statusLabel: "Pendente",
+              total: 125.9,
+              items: [
+                { name: "Picanha Assada 750g", quantity: 2, price: 50.0 },
+                { name: "Farofa Completa", quantity: 1, price: 12.9 },
+                { name: "Refrigerante Lata", quantity: 2, price: 5.9 },
+              ],
+              deliveryType: "Retirada",
+              deliveryAddress: "Loja Física",
+              paymentMethod: "Dinheiro",
+              dataHora: "2024-12-15 14:30",
+              notas: "Sem cebola na farofa",
+            },
+            {
+              id: "#PED-002",
+              cliente: "Maria Santos",
+              cpf: "987.654.321-00",
+              status: "em-preparo",
+              statusLabel: "Em Preparo",
+              total: 89.5,
+              items: [
+                { name: "Frango Inteiro Assado", quantity: 1, price: 28.9 },
+                { name: "Vinagrete Tradicional", quantity: 1, price: 8.9 },
+                { name: "Suco Natural", quantity: 2, price: 12.9 },
+              ],
+              deliveryType: "Delivery",
+              deliveryAddress: "Rua das Flores, 123 - Apto 45",
+              paymentMethod: "PIX",
+              dataHora: "2024-12-15 14:45",
+              notas: "Cliente ligou para confirmar",
+            },
+            {
+              id: "#PED-003",
+              cliente: "Pedro Oliveira",
+              cpf: "456.789.123-45",
+              status: "pronto",
+              statusLabel: "Pronto",
+              total: 156.8,
+              items: [
+                { name: "Alcatra Assada 1000g", quantity: 1, price: 65.9 },
+                { name: "Costela Assada", quantity: 1, price: 48.9 },
+                { name: "Pão de Alho", quantity: 2, price: 9.9 },
+              ],
+              deliveryType: "Retirada",
+              deliveryAddress: "Loja Física",
+              paymentMethod: "Cartão",
+              dataHora: "2024-12-15 15:00",
+              notas: "Aguardando cliente para retirada",
+            },
+            {
+              id: "#PED-004",
+              cliente: "Ana Costa",
+              cpf: "789.123.456-78",
+              status: "em-preparo",
+              statusLabel: "Em Preparo",
+              total: 98.7,
+              items: [
+                { name: "Tilápia Grelhada", quantity: 1, price: 34.9 },
+                { name: "Mandioca Frita", quantity: 1, price: 11.9 },
+                { name: "Cerveja Long Neck", quantity: 3, price: 8.9 },
+              ],
+              deliveryType: "Delivery",
+              deliveryAddress: "Rua Principal, 456",
+              paymentMethod: "Dinheiro",
+              dataHora: "2024-12-15 15:15",
+              notas: "Entregar em 30 minutos",
+            },
+            {
+              id: "#PED-005",
+              cliente: "Carlos Mendes",
+              cpf: "321.654.987-32",
+              status: "pendente",
+              statusLabel: "Pendente",
+              total: 75.5,
+              items: [
+                { name: "Contrafilé", quantity: 1, price: 42.9 },
+                { name: "Água Mineral", quantity: 2, price: 3.9 },
+              ],
+              deliveryType: "Retirada",
+              deliveryAddress: "Loja Física",
+              paymentMethod: "PIX",
+              dataHora: "2024-12-15 15:30",
+              notas: "Pedido urgente",
+            },
+            {
+              id: "#PED-006",
+              cliente: "Fernanda Lima",
+              cpf: "654.987.321-65",
+              status: "entregue",
+              statusLabel: "Entregue",
+              total: 145.0,
+              items: [
+                { name: "Moqueca de Peixe", quantity: 1, price: 55.0 },
+                { name: "Arroz Integral", quantity: 1, price: 12.0 },
+                { name: "Suco de Laranja", quantity: 2, price: 9.0 },
+              ],
+              deliveryType: "Delivery",
+              deliveryAddress: "Avenida Central, 789",
+              paymentMethod: "Cartão",
+              dataHora: "2024-12-15 13:00",
+              notas: "Entregue com sucesso",
+            },
+          ];
+
+          return {
+            getPedidos: () => [...MOCK_PEDIDOS],
+            getPedidosPorStatus: (status) => {
+              if (status === "todos") return [...MOCK_PEDIDOS];
+              return MOCK_PEDIDOS.filter((p) => p.status === status);
+            },
+            getPedidoById: (id) => MOCK_PEDIDOS.find((p) => p.id === id),
+            contarPorStatus: () => ({
+              total: MOCK_PEDIDOS.length,
+              pendente: MOCK_PEDIDOS.filter((p) => p.status === "pendente")
+                .length,
+              "em-preparo": MOCK_PEDIDOS.filter(
+                (p) => p.status === "em-preparo"
+              ).length,
+              pronto: MOCK_PEDIDOS.filter((p) => p.status === "pronto").length,
+              entregue: MOCK_PEDIDOS.filter((p) => p.status === "entregue")
+                .length,
+            }),
+          };
+        })();
+
+        // ==================== MÓDULO DE UTILITÁRIOS ====================
+        const UtilsModule = (function () {
+          const formatCurrency = (value) => {
+            return `R$ ${value.toFixed(2).replace(".", ",")}`;
+          };
+
+          const formatDate = (dateString) => {
+            const date = new Date(dateString);
+            return date.toLocaleDateString("pt-BR", {
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+          };
+
+          const sanitizeText = (text) => {
+            const div = document.createElement("div");
+            div.textContent = text;
+            return div.innerHTML;
+          };
+
+          return {
+            formatCurrency,
+            formatDate,
+            sanitizeText,
+          };
+        })();
+
+        // ==================== MÓDULO DE NOTIFICAÇÕES ====================
+        const NotificationModule = (function () {
+          const NOTIFICATION_TYPES = {
+            SUCCESS: "success",
+            ERROR: "error",
+            INFO: "info",
+            WARNING: "warning",
+          };
+
+          const show = (
+            message,
+            type = NOTIFICATION_TYPES.INFO,
+            duration = 3000
+          ) => {
+            const notificationArea =
+              document.getElementById("notificationArea");
+            if (!notificationArea) return;
+
+            const notification = document.createElement("div");
+            notification.className = `notification notification--${type}`;
+            notification.innerHTML = `
+              <div class="notification__content">
+                <i class="notification__icon ${getIconForType(type)}"></i>
+                <span class="notification__message">${UtilsModule.sanitizeText(
+                  message
+                )}</span>
+              </div>
+            `;
+            notificationArea.appendChild(notification);
+
+            setTimeout(() => {
+              notification.classList.add("notification--removing");
+              setTimeout(() => notification.remove(), 300);
+            }, duration);
+          };
+
+          const getIconForType = (type) => {
+            const icons = {
+              [NOTIFICATION_TYPES.SUCCESS]: "fas fa-check-circle",
+              [NOTIFICATION_TYPES.ERROR]: "fas fa-exclamation-circle",
+              [NOTIFICATION_TYPES.INFO]: "fas fa-info-circle",
+              [NOTIFICATION_TYPES.WARNING]: "fas fa-exclamation-triangle",
+            };
+            return icons[type] || icons[NOTIFICATION_TYPES.INFO];
+          };
+
+          return {
+            show,
+            success: (message, duration) =>
+              show(message, NOTIFICATION_TYPES.SUCCESS, duration),
+            error: (message, duration) =>
+              show(message, NOTIFICATION_TYPES.ERROR, duration),
+            info: (message, duration) =>
+              show(message, NOTIFICATION_TYPES.INFO, duration),
+            warning: (message, duration) =>
+              show(message, NOTIFICATION_TYPES.WARNING, duration),
+          };
+        })();
+
+        // ==================== MÓDULO DE UI ====================
+        const UIModule = (function () {
+          let filtroAtual = "todos";
+
+          const atualizarStats = () => {
+            const stats = DataModule.contarPorStatus();
+            document.getElementById("totalPedidos").textContent = stats.total;
+            document.getElementById("pedidosPendentes").textContent =
+              stats.pendente;
+            document.getElementById("pedidosEmPreparo").textContent =
+              stats["em-preparo"];
+            document.getElementById("pedidosProntos").textContent =
+              stats.pronto;
+          };
+
+          const renderizarPedidos = (pedidos) => {
+            const grid = document.getElementById("pedidosGrid");
+            if (!grid) return;
+
+            if (pedidos.length === 0) {
+              grid.innerHTML = `
+                <div class="empty-state-funcionarios">
+                  <i class="fas fa-inbox"></i>
+                  <h3>Nenhum pedido encontrado</h3>
+                  <p>Não há pedidos com este status no momento.</p>
+                </div>
+              `;
+              return;
+            }
+
+            grid.innerHTML = pedidos
+              .map((pedido) => criarCardPedido(pedido))
+              .join("");
+          };
+
+          const criarCardPedido = (pedido) => {
+            const statusColors = {
+              pendente: "warning",
+              "em-preparo": "info",
+              pronto: "success",
+              entregue: "completed",
+            };
+
+            const statusIcons = {
+              pendente: "fas fa-clock",
+              "em-preparo": "fas fa-fire",
+              pronto: "fas fa-check-circle",
+              entregue: "fas fa-truck",
+            };
+
+            const statusColor = statusColors[pedido.status] || "info";
+            const statusIcon =
+              statusIcons[pedido.status] || "fas fa-info-circle";
+
+            return `
+              <div class="card-pedido status-${statusColor}">
+                <div class="card-header-pedido">
+                  <div class="pedido-id-info">
+                    <h3 class="pedido-id">${UtilsModule.sanitizeText(
+                      pedido.id
+                    )}</h3>
+                    <p class="pedido-cliente">${UtilsModule.sanitizeText(
+                      pedido.cliente
+                    )}</p>
+                  </div>
+                  <div class="pedido-status">
+                    <i class="${statusIcon}"></i>
+                    <span>${UtilsModule.sanitizeText(pedido.statusLabel)}</span>
+                  </div>
+                </div>
+
+                <div class="card-body-pedido">
+                  <div class="pedido-items">
+                    ${pedido.items
+                      .slice(0, 2)
+                      .map(
+                        (item) => `
+                      <div class="item-line">
+                        <span class="item-qty">${item.quantity}x</span>
+                        <span class="item-name">${UtilsModule.sanitizeText(
+                          item.name
+                        )}</span>
+                      </div>
+                    `
+                      )
+                      .join("")}
+                    ${
+                      pedido.items.length > 2
+                        ? `<div class="items-more">+${
+                            pedido.items.length - 2
+                          } item(ns)</div>`
+                        : ""
+                    }
+                  </div>
+
+                  <div class="pedido-meta">
+                    <span class="delivery-type">
+                      <i class="fas fa-${
+                        pedido.deliveryType === "Delivery"
+                          ? "motorcycle"
+                          : "store"
+                      }"></i>
+                      ${UtilsModule.sanitizeText(pedido.deliveryType)}
+                    </span>
+                    <span class="pedido-total">${UtilsModule.formatCurrency(
+                      pedido.total
+                    )}</span>
+                  </div>
+                </div>
+
+                <div class="card-footer-pedido">
+                  <button class="btn-detalhes" data-pedido-id="${pedido.id}">
+                    <i class="fas fa-eye"></i>
+                    Ver Detalhes
+                  </button>
+                </div>
+              </div>
+            `;
+          };
+
+          const abrirModal = (pedidoId) => {
+            const pedido = DataModule.getPedidoById(pedidoId);
+            if (!pedido) return;
+
+            const modal = document.getElementById("modalPedido");
+            const modalBody = document.getElementById("modalBody");
+
+            const statusColors = {
+              pendente: "warning",
+              "em-preparo": "info",
+              pronto: "success",
+              entregue: "completed",
+            };
+
+            const statusColor = statusColors[pedido.status] || "info";
+
+            modalBody.innerHTML = `
+              <div class="modal-details">
+                <div class="detail-section">
+                  <h4>Informações do Pedido</h4>
+                  <div class="detail-row">
+                    <span class="detail-label">Número:</span>
+                    <span class="detail-value">${UtilsModule.sanitizeText(
+                      pedido.id
+                    )}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-label">Cliente:</span>
+                    <span class="detail-value">${UtilsModule.sanitizeText(
+                      pedido.cliente
+                    )}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-label">Data/Hora:</span>
+                    <span class="detail-value">${UtilsModule.sanitizeText(
+                      pedido.dataHora
+                    )}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-label">Status:</span>
+                    <span class="detail-value status-badge status-${statusColor}">
+                      ${UtilsModule.sanitizeText(pedido.statusLabel)}
+                    </span>
+                  </div>
+                </div>
+
+                <div class="detail-section">
+                  <h4>Itens do Pedido</h4>
+                  <div class="items-table">
+                    ${pedido.items
+                      .map(
+                        (item) => `
+                      <div class="item-row">
+                        <div class="item-info">
+                          <span class="item-qty">${item.quantity}x</span>
+                          <span class="item-name">${UtilsModule.sanitizeText(
+                            item.name
+                          )}</span>
+                        </div>
+                        <span class="item-price">${UtilsModule.formatCurrency(
+                          item.price * item.quantity
+                        )}</span>
+                      </div>
+                    `
+                      )
+                      .join("")}
+                  </div>
+                </div>
+
+                <div class="detail-section">
+                  <h4>Entrega e Pagamento</h4>
+                  <div class="detail-row">
+                    <span class="detail-label">Tipo:</span>
+                    <span class="detail-value">${UtilsModule.sanitizeText(
+                      pedido.deliveryType
+                    )}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-label">Endereço:</span>
+                    <span class="detail-value">${UtilsModule.sanitizeText(
+                      pedido.deliveryAddress
+                    )}</span>
+                  </div>
+                  <div class="detail-row">
+                    <span class="detail-label">Pagamento:</span>
+                    <span class="detail-value">${UtilsModule.sanitizeText(
+                      pedido.paymentMethod
+                    )}</span>
+                  </div>
+                </div>
+
+                <div class="detail-section">
+                  <h4>Resumo Financeiro</h4>
+                  <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span>${UtilsModule.formatCurrency(
+                      pedido.total * 0.95
+                    )}</span>
+                  </div>
+                  <div class="summary-row">
+                    <span>Taxa:</span>
+                    <span>${UtilsModule.formatCurrency(
+                      pedido.total * 0.05
+                    )}</span>
+                  </div>
+                  <div class="summary-row total">
+                    <span>Total:</span>
+                    <span>${UtilsModule.formatCurrency(pedido.total)}</span>
+                  </div>
+                </div>
+
+                ${
+                  pedido.notas
+                    ? `
+                  <div class="detail-section">
+                    <h4>Observações</h4>
+                    <p class="notas">${UtilsModule.sanitizeText(
+                      pedido.notas
+                    )}</p>
+                  </div>
+                `
+                    : ""
+                }
+
+                <div class="detail-section actions">
+                  <button class="btn-status" data-status="em-preparo" ${
+                    pedido.status === "em-preparo" ? "disabled" : ""
+                  }>
+                    <i class="fas fa-fire"></i>
+                    Iniciar Preparo
+                  </button>
+                  <button class="btn-status" data-status="pronto" ${
+                    pedido.status === "pronto" ? "disabled" : ""
+                  }>
+                    <i class="fas fa-check"></i>
+                    Marcar Pronto
+                  </button>
+                  <button class="btn-status" data-status="entregue" ${
+                    pedido.status === "entregue" ? "disabled" : ""
+                  }>
+                    <i class="fas fa-truck"></i>
+                    Marcar Entregue
+                  </button>
+                </div>
+              </div>
+            `;
+
+            modal.style.display = "flex";
+            modal.setAttribute("aria-hidden", "false");
+          };
+
+          const fecharModal = () => {
+            const modal = document.getElementById("modalPedido");
+            modal.style.display = "none";
+            modal.setAttribute("aria-hidden", "true");
+          };
+
+          return {
+            atualizarStats,
+            renderizarPedidos,
+            abrirModal,
+            fecharModal,
+            get filtroAtual() {
+              return filtroAtual;
+            },
+            set filtroAtual(value) {
+              filtroAtual = value;
+            },
+          };
+        })();
+
+        // ==================== MÓDULO PRINCIPAL ====================
+        const App = (function () {
+          const init = () => {
+            // Verificar se está logado
+            const isLoggedIn = sessionStorage.getItem("isLoggedIn");
+            if (!isLoggedIn) {
+              window.location.href = "login.html";
+              return;
+            }
+
+            // Inicializar
+            UIModule.atualizarStats();
+            UIModule.renderizarPedidos(DataModule.getPedidos());
+            atualizarHora();
+            setInterval(atualizarHora, 1000);
+
+            // Event listeners
+            setupEventListeners();
+
+            NotificationModule.success("Painel carregado com sucesso!", 2000);
+          };
+
+          const atualizarHora = () => {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, "0");
+            const minutes = String(now.getMinutes()).padStart(2, "0");
+            document.getElementById(
+              "currentTime"
+            ).textContent = `${hours}:${minutes}`;
+          };
+
+          const setupEventListeners = () => {
+            // Filtros
+            document.querySelectorAll(".filtro-btn").forEach((btn) => {
+              btn.addEventListener("click", function () {
+                document
+                  .querySelectorAll(".filtro-btn")
+                  .forEach((b) => b.classList.remove("active"));
+                this.classList.add("active");
+
+                const filtro = this.dataset.filtro;
+                UIModule.filtroAtual = filtro;
+                const pedidos = DataModule.getPedidosPorStatus(filtro);
+                UIModule.renderizarPedidos(pedidos);
+              });
+            });
+
+            // Detalhes do pedido
+            document.addEventListener("click", function (e) {
+              const btnDetalhes = e.target.closest(".btn-detalhes");
+              if (btnDetalhes) {
+                const pedidoId = btnDetalhes.dataset.pedidoId;
+                UIModule.abrirModal(pedidoId);
+              }
+
+              const closeModal = e.target.closest("#closeModal");
+              if (closeModal) {
+                UIModule.fecharModal();
+              }
+            });
+
+            // Fechar modal ao clicar no backdrop
+            document
+              .getElementById("modalPedido")
+              .addEventListener("click", function (e) {
+                if (e.target === this) {
+                  UIModule.fecharModal();
+                }
+              });
+
+            // Logout
+            document
+              .getElementById("btnLogout")
+              .addEventListener("click", function () {
+                sessionStorage.clear();
+                window.location.href = "login.html";
+              });
+          };
+
+          return { init };
+        })();
+
+        App.init();
+      });
+    </script>
+  </body>
+</html>
