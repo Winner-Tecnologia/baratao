@@ -1,489 +1,450 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="style_login.css" />
-    <link
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <title>Login - Baratão Assados</title>
-  </head>
-  <body>
-    <div class="background-animation"></div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baratão Assados - Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style_login.css">
+    <style>
+        / Estilos básicos para o login.html /
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: #333;
+            flex-direction: column;
+        }
 
-    <section class="principal">
-      <div class="container">
-        <!-- Logo/Branding Area -->
-        <div class="logo-area">
-          <div class="logo-icon">
-            <i class="fas fa-fire"></i>
-          </div>
-          <h1 class="brand-name">Baratão Assados</h1>
-        </div>
+        .login-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
 
-        <div class="login-card">
-          <h2>Bem-vindo de volta!</h2>
-          <p class="subtitle">Faça seu login para continuar</p>
+        .login-container h2 {
+            margin-bottom: 30px;
+            color: #d9534f; / Cor do Baratão Assados /
+            font-weight: 700;
+        }
 
-          <form class="formulario" action="#" method="post" novalidate>
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 400;
+            color: #555;
+        }
+
+        .input-group input {
+            width: calc(100% - 20px);
+            padding: 12px 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .input-group input:focus {
+            border-color: #d9534f;
+            outline: none;
+            box-shadow: 0 0 5px rgba(217, 83, 79, 0.3);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 10px;
+            top: 40px;
+            cursor: pointer;
+            color: #888;
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 12px;
+            background-color: #d9534f;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background-color: #c9302c;
+        }
+
+        .links-container {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .links-container a {
+            color: #d9534f;
+            text-decoration: none;
+            margin: 0 10px;
+            transition: color 0.3s ease;
+        }
+
+        .links-container a:hover {
+            text-decoration: underline;
+            color: #c9302c;
+        }
+
+        .contact-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-size: 14px;
+            color: #777;
+        }
+
+        .contact-section p {
+            margin-bottom: 15px;
+        }
+
+        .contact-links a {
+            color: #d9534f;
+            text-decoration: none;
+            margin: 0 10px;
+            font-size: 24px;
+            transition: color 0.3s ease;
+        }
+
+        .contact-links a:hover {
+            color: #c9302c;
+        }
+
+        / Notificações /
+        #notification-area {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .notification {
+            padding: 15px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            color: #fff;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 250px;
+        }
+
+        .notification.success {
+            background-color: #5cb85c;
+        }
+
+        .notification.error {
+            background-color: #d9534f;
+        }
+
+        .notification.info {
+            background-color: #5bc0de;
+        }
+
+        .notification i {
+            font-size: 1.2em;
+        }
+
+        / Responsividade /
+        @media (max-width: 600px) {
+            .login-container {
+                margin: 20px;
+                padding: 30px;
+            }
+            .contact-links a {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Baratão Assados</h2>
+        <form id="loginForm">
             <div class="input-group">
-              <div class="input-wrapper">
-                <i class="fas fa-user icon-input"></i>
-                <input
-                  type="text"
-                  id="cpf"
-                  name="cpf"
-                  placeholder="Digite seu CPF"
-                  inputmode="numeric"
-                  maxlength="14"
-                  required
-                />
-              </div>
+                <label for="cpf">CPF:</label>
+                <input type="text" id="cpf" name="cpf" placeholder="000.000.000-00" required maxlength="14">
             </div>
-
             <div class="input-group">
-              <div class="input-wrapper">
-                <i class="fas fa-lock icon-input"></i>
-                <input
-                  type="password"
-                  id="senha"
-                  name="senha"
-                  placeholder="Digite sua senha"
-                  required
-                />
-                <i class="fas fa-eye toggle-password" id="togglePassword"></i>
-              </div>
+                <label for="senha">Senha:</label>
+                <input type="password" id="senha" name="senha" placeholder="Sua senha" required minlength="6">
+                <span class="password-toggle" id="togglePassword">
+                    <i class="fas fa-eye"></i>
+                </span>
             </div>
-
-            <div class="forgot-password">
-              <a href="#">Esqueceu sua senha?</a>
-            </div>
-
-            <button
-              type="button"
-              class="btn-login"
-              onclick="location.href='index.html'"
-            >
-              <span>Entrar</span>
-              <i class="fas fa-arrow-right"></i>
+            <button type="submit" class="btn-login">
+                <i class="fas fa-sign-in-alt"></i> Entrar
             </button>
-
-            <div class="divider">
-              <span>ou</span>
-            </div>
-
-            <button
-              type="button"
-              class="btn-register"
-              data-action="go-to-register"
-            >
-              <i class="fas fa-user-plus"></i>
-              Criar nova conta
-            </button>
-          </form>
+        </form>
+        <div class="links-container">
+            <a href="#">Esqueci minha senha</a>
+            <a href="registro.html">Criar conta</a>
         </div>
-      </div>
+    </div>
 
-      <!-- Seção de Contatos Modernizada -->
-      <div class="contatos-section">
-        <p class="contatos-title">Onde nos encontrar</p>
-        <div class="contatos">
-          <a
-            href="https://www.instagram.com/barataoassados/"
-            target="_blank"
-            rel="noopener"
-            class="social-link instagram"
-          >
-            <i class="fab fa-instagram"></i>
-            <span>Instagram</span>
-          </a>
-          <a
-            href="https://wa.me/5500000000000"
-            target="_blank"
-            rel="noopener"
-            class="social-link whatsapp"
-          >
-            <i class="fab fa-whatsapp"></i>
-            <span>WhatsApp</span>
-          </a>
-          <a
-            href="https://wa.me/5500000000000"
-            target="_blank"
-            rel="noopener"
-            class="social-link location"
-          >
-            <i class="fas fa-map-marker-alt"></i>
-            <span>Localização</span>
-          </a>
+    <div class="contact-section">
+        <p>Fale conosco:</p>
+        <div class="contact-links">
+            <a href="https://www.instagram.com/barataoassados" target="_blank" aria-label="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://wa.me/5561999999999" target="_blank" aria-label="WhatsApp">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="https://maps.app.goo.gl/SEU_ENDERECO_AQUI" target="_blank" aria-label="Localização">
+                <i class="fas fa-map-marker-alt"></i>
+            </a>
         </div>
-      </div>
-    </section>
+    </div>
 
+    <div id="notification-area"></div>
+
+    <script src="js/auth.js"></script>
     <script>
-      // ==================== MÓDULO DE NAVEGAÇÃO ====================
-      const NavigationModule = (() => {
-        "use strict";
-
         /**
-         * Redireciona para a página de registro
+         * login.html - Script principal para a página de login
+         * Gerencia a UI, validações e integração com a API de autenticação.
          */
-        const goToRegister = () => {
-          try {
-            window.location.href = "registro.html";
-          } catch (error) {
-            console.error("Erro ao navegar para registro:", error);
-            // Fallback: tentar caminhos alternativos
-            const possiblePaths = [
-              "registro.html",
-              "./registro.html",
-              "../registro.html",
-              "register.html",
-            ];
 
-            // Tenta o primeiro caminho alternativo
-            window.location.href = possiblePaths[0];
-          }
-        };
+        // --- Módulos de Utilidade ---
 
-        /**
-         * Redireciona para a página inicial após login
-         */
-        const goToHome = () => {
-          try {
-            window.location.href = "index.html";
-          } catch (error) {
-            console.error("Erro ao navegar para home:", error);
-            window.location.href = "/";
-          }
-        };
-
-        // API pública
-        return {
-          goToRegister,
-          goToHome,
-        };
-      })();
-
-      // ==================== MÓDULO DE VALIDAÇÃO ====================
-      const ValidationModule = (() => {
-        "use strict";
-
-        /**
-         * Valida CPF usando algoritmo oficial
-         * @param {string} cpf - CPF a ser validado
-         * @returns {boolean} True se CPF for válido
-         */
-        const validateCPF = (cpf) => {
-          // Remove caracteres não numéricos
-          cpf = cpf.replace(/\D/g, "");
-
-          // Verifica se tem 11 dígitos
-          if (cpf.length !== 11) return false;
-
-          // Verifica se todos os dígitos são iguais
-          if (/^(\d)\1{10}$/.test(cpf)) return false;
-
-          // Validação dos dígitos verificadores
-          let sum = 0;
-          for (let i = 0; i < 9; i++) {
-            sum += parseInt(cpf.charAt(i)) * (10 - i);
-          }
-
-          let remainder = (sum * 10) % 11;
-          if (remainder === 10 || remainder === 11) remainder = 0;
-          if (remainder !== parseInt(cpf.charAt(9))) return false;
-
-          sum = 0;
-          for (let i = 0; i < 10; i++) {
-            sum += parseInt(cpf.charAt(i)) * (11 - i);
-          }
-
-          remainder = (sum * 10) % 11;
-          if (remainder === 10 || remainder === 11) remainder = 0;
-          if (remainder !== parseInt(cpf.charAt(10))) return false;
-
-          return true;
-        };
-
-        /**
-         * Valida se a senha atende aos critérios mínimos
-         * @param {string} password - Senha a ser validada
-         * @returns {Object} Objeto com resultado e mensagem
-         */
-        const validatePassword = (password) => {
-          const minLength = 6;
-          const hasNumber = /\d/.test(password);
-          const hasLetter = /[a-zA-Z]/.test(password);
-
-          if (password.length < minLength) {
-            return {
-              valid: false,
-              message: `Senha deve ter pelo menos ${minLength} caracteres`,
+        const NavigationModule = (() => {
+            const goToHome = () => {
+                window.location.href = 'index.html';
             };
-          }
 
-          if (!hasNumber || !hasLetter) {
-            return {
-              valid: false,
-              message: "Senha deve conter pelo menos uma letra e um número",
+            const goToRegister = () => {
+                window.location.href = 'registro.html';
             };
-          }
 
-          return {
-            valid: true,
-            message: "Senha válida",
-          };
-        };
+            return {
+                goToHome,
+                goToRegister
+            };
+        })();
 
-        // API pública
-        return {
-          validateCPF,
-          validatePassword,
-        };
-      })();
+        const ValidationModule = (() => {
+            const validateCPF = (cpf) => {
+                cpf = cpf.replace(/\D/g, ''); // Remove caracteres não numéricos
+                if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+                    return false;
+                }
 
-      // ==================== MÓDULO DE NOTIFICAÇÕES ====================
-      const NotificationModule = (() => {
-        "use strict";
+                let sum = 0;
+                let remainder;
 
-        /**
-         * Exibe notificação simples (pode ser expandido no futuro)
-         * @param {string} message - Mensagem a ser exibida
-         * @param {string} type - Tipo da notificação (success, error, warning)
-         */
-        const show = (message, type = "info") => {
-          // Por enquanto usa alert, mas pode ser melhorado com toast notifications
-          if (type === "error") {
-            alert(`Erro: ${message}`);
-          } else if (type === "success") {
-            alert(`Sucesso: ${message}`);
-          } else {
-            alert(message);
-          }
-        };
+                for (let i = 1; i <= 9; i++) {
+                    sum += parseInt(cpf.substring(i - 1, i)) * (11 - i);
+                }
+                remainder = (sum * 10) % 11;
+                if ((remainder === 10) || (remainder === 11)) {
+                    remainder = 0;
+                }
+                if (remainder !== parseInt(cpf.substring(9, 10))) {
+                    return false;
+                }
 
-        // API pública
-        return {
-          show,
-          error: (message) => show(message, "error"),
-          success: (message) => show(message, "success"),
-          warning: (message) => show(message, "warning"),
-        };
-      })();
+                sum = 0;
+                for (let i = 1; i <= 10; i++) {
+                    sum += parseInt(cpf.substring(i - 1, i)) * (12 - i);
+                }
+                remainder = (sum * 10) % 11;
+                if ((remainder === 10) || (remainder === 11)) {
+                    remainder = 0;
+                }
+                if (remainder !== parseInt(cpf.substring(10, 11))) {
+                    return false;
+                }
 
-      // ==================== MÓDULO DE INTERFACE ====================
-      const UIModule = (() => {
-        "use strict";
+                return true;
+            };
 
-        /**
-         * Configura a funcionalidade de toggle da senha
-         */
-        const setupPasswordToggle = () => {
-          const toggleButton = document.getElementById("togglePassword");
-          const passwordInput = document.getElementById("senha");
+            const validatePassword = (password) => {
+                return password.length >= 6; // Mínimo de 6 caracteres
+            };
 
-          if (toggleButton && passwordInput) {
-            toggleButton.addEventListener("click", function () {
-              const type =
-                passwordInput.getAttribute("type") === "password"
-                  ? "text"
-                  : "password";
-              passwordInput.setAttribute("type", type);
-              this.classList.toggle("fa-eye");
-              this.classList.toggle("fa-eye-slash");
-            });
-          }
-        };
+            return {
+                validateCPF,
+                validatePassword
+            };
+        })();
 
-        /**
-         * Configura a formatação do CPF
-         */
-        const setupCPFFormatting = () => {
-          const cpfInput = document.getElementById("cpf");
+        const NotificationModule = (() => {
+            const notificationArea = document.getElementById('notification-area');
 
-          if (cpfInput) {
-            cpfInput.addEventListener("input", function (e) {
-              let value = e.target.value.replace(/\D/g, "");
-              if (value.length > 11) value = value.slice(0, 11);
-              value = value.replace(
-                /(\d{3})(\d{3})(\d{3})(\d{2})/,
-                "$1.$2.$3-$4"
-              );
-              e.target.value = value;
-            });
-          }
-        };
+            const showNotification = (message, type, duration = 3000) => {
+                const notification = document.createElement('div');
+                notification.classList.add('notification', type);
+                notification.innerHTML = <i class="fas ${getIcon(type)}"></i> ${message};
+                notificationArea.appendChild(notification);
 
-        /**
-         * Configura as animações de foco dos inputs
-         */
-        const setupInputAnimations = () => {
-          document.querySelectorAll(".input-wrapper input").forEach((input) => {
-            input.addEventListener("focus", function () {
-              this.parentElement.classList.add("focused");
-            });
+                setTimeout(() => {
+                    notification.remove();
+                }, duration);
+            };
 
-            input.addEventListener("blur", function () {
-              if (!this.value) {
-                this.parentElement.classList.remove("focused");
-              }
-            });
-          });
-        };
+            const getIcon = (type) => {
+                switch (type) {
+                    case 'success': return 'fa-check-circle';
+                    case 'error': return 'fa-times-circle';
+                    case 'info': return 'fa-info-circle';
+                    default: return 'fa-bell';
+                }
+            };
 
-        /**
-         * Configura os event listeners globais
-         */
-        const setupGlobalEventListeners = () => {
-          document.addEventListener("click", function (event) {
-            const target = event.target.closest("[data-action]");
-            if (!target) return;
+            const success = (message, duration) => showNotification(message, 'success', duration);
+            const error = (message, duration) => showNotification(message, 'error', duration);
+            const info = (message, duration) => showNotification(message, 'info', duration);
 
-            const action = target.dataset.action;
+            return {
+                success,
+                error,
+                info
+            };
+        })();
 
-            // Prevenir comportamento padrão para botões
-            if (target.tagName === "BUTTON") {
-              event.preventDefault();
-            }
+        const UIModule = (() => {
+            const cpfInput = document.getElementById('cpf');
+            const senhaInput = document.getElementById('senha');
+            const togglePassword = document.getElementById('togglePassword');
 
-            // Roteamento de ações
-            switch (action) {
-              case "go-to-register":
-                NavigationModule.goToRegister();
-                break;
-              default:
-                console.warn(`Ação não reconhecida: ${action}`);
-            }
-          });
-        };
+            const formatCPF = (value) => {
+                value = value.replace(/\D/g, ''); // Remove tudo que não é dígito
+                value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Adiciona o primeiro ponto
+                value = value.replace(/(\d{3})(\d)/, '$1.$2'); // Adiciona o segundo ponto
+                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2'); // Adiciona o hífen
+                return value;
+            };
 
-        /**
-         * Valida o formulário de login
-         * @returns {boolean} True se formulário for válido
-         */
-        const validateLoginForm = () => {
-          const cpfInput = document.getElementById("cpf");
-          const senhaInput = document.getElementById("senha");
+            const handleCpfInput = (event) => {
+                event.target.value = formatCPF(event.target.value);
+            };
 
-          if (!cpfInput || !senhaInput) {
-            NotificationModule.error("Campos do formulário não encontrados");
-            return false;
-          }
+            const handleTogglePassword = () => {
+                const type = senhaInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                senhaInput.setAttribute('type', type);
+                togglePassword.querySelector('i').classList.toggle('fa-eye');
+                togglePassword.querySelector('i').classList.toggle('fa-eye-slash');
+            };
 
-          const cpf = cpfInput.value.trim();
-          const senha = senhaInput.value.trim();
+            const validateLoginForm = () => {
+                const cpf = cpfInput.value;
+                const senha = senhaInput.value;
 
-          // Validação básica de campos vazios
-          if (!cpf || !senha) {
-            NotificationModule.error("Por favor, preencha todos os campos");
-            return false;
-          }
+                if (!ValidationModule.validateCPF(cpf)) {
+                    NotificationModule.error("CPF inválido. Verifique o formato e os dígitos.");
+                    return false;
+                }
+                if (!ValidationModule.validatePassword(senha)) {
+                    NotificationModule.error("A senha deve ter pelo menos 6 caracteres.");
+                    return false;
+                }
+                return true;
+            };
 
-          // Validação do CPF
-          if (!ValidationModule.validateCPF(cpf)) {
-            NotificationModule.error("CPF inválido");
-            cpfInput.focus();
-            return false;
-          }
+            const init = () => {
+                cpfInput.addEventListener('input', handleCpfInput);
+                togglePassword.addEventListener('click', handleTogglePassword);
+            };
 
-          // Validação da senha
-          const passwordValidation = ValidationModule.validatePassword(senha);
-          if (!passwordValidation.valid) {
-            NotificationModule.error(passwordValidation.message);
-            senhaInput.focus();
-            return false;
-          }
+            return {
+                init,
+                validateLoginForm
+            };
+        })();
 
-          return true;
-        };
+        // --- Módulo Principal da Aplicação ---
 
-        // API pública
-        return {
-          setupPasswordToggle,
-          setupCPFFormatting,
-          setupInputAnimations,
-          setupGlobalEventListeners,
-          validateLoginForm,
-        };
-      })();
+        const App = (() => {
+            const loginForm = document.getElementById('loginForm');
 
-      // ==================== MÓDULO PRINCIPAL ====================
-      const App = (() => {
-        "use strict";
+            const processLogin = async (event) => {
+                event.preventDefault(); // Previne o comportamento padrão do formulário
 
-        /**
-         * Processa o login do usuário
-         */
-        const processLogin = () => {
-          if (UIModule.validateLoginForm()) {
-            // Aqui você pode adicionar a lógica de autenticação real
-            // Por enquanto, apenas simula um login bem-sucedido
-            NotificationModule.success("Login realizado com sucesso!");
+                if (!UIModule.validateLoginForm()) {
+                    return; // Validação falhou
+                }
 
-            // Pequeno delay para mostrar a mensagem antes do redirecionamento
-            setTimeout(() => {
-              NavigationModule.goToHome();
-            }, 1000);
-          }
-        };
+                try {
+                    // Mostrar feedback de carregamento
+                    const loginButton = document.querySelector(".btn-login");
+                    const originalButtonContent = loginButton.innerHTML;
+                    loginButton.disabled = true;
+                    loginButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Autenticando...';
 
-        /**
-         * Inicializa a aplicação
-         */
-        const init = () => {
-          try {
-            // Configurar funcionalidades da interface
-            UIModule.setupPasswordToggle();
-            UIModule.setupCPFFormatting();
-            UIModule.setupInputAnimations();
-            UIModule.setupGlobalEventListeners();
+                    // Obter dados do formulário
+                    const cpf = document.getElementById("cpf").value;
+                    const senha = document.getElementById("senha").value;
 
-            // Configurar o botão de login para usar a validação
-            const loginButton = document.querySelector(".btn-login");
-            if (loginButton) {
-              // Remove o onclick inline e adiciona event listener
-              loginButton.removeAttribute("onclick");
-              loginButton.addEventListener("click", processLogin);
-            }
+                    // Chamar API de autenticação
+                    const resultado = await AuthAPI.login(cpf, senha);
 
-            console.log("🚀 Página de Login inicializada com sucesso!");
-          } catch (error) {
-            console.error("❌ Erro na inicialização do Login:", error);
-            NotificationModule.error(
-              "Erro ao carregar a página. Tente recarregar."
-            );
-          }
-        };
+                    // Sucesso!
+                    NotificationModule.success("Login realizado com sucesso!");
 
-        // API pública
-        return {
-          init,
-          processLogin,
-        };
-      })();
+                    // Armazenar dados do usuário no sessionStorage
+                    sessionStorage.setItem('usuario_id', resultado.usuario.id);
+                    sessionStorage.setItem('usuario_nome', resultado.usuario.nome);
+                    sessionStorage.setItem('usuario_cpf', resultado.usuario.cpf); // Armazenar CPF limpo ou formatado conforme preferir
 
-      // ==================== INICIALIZAÇÃO ====================
-      document.addEventListener("DOMContentLoaded", App.init);
+                    // Redirecionar após pequeno delay
+                    setTimeout(() => {
+                        NavigationModule.goToHome();
+                    }, 1000);
 
-      // Exportar módulos para debug (apenas em desenvolvimento)
-      if (
-        typeof window !== "undefined" &&
-        window.location.hostname === "localhost"
-      ) {
-        window.DebugModules = {
-          Navigation: NavigationModule,
-          Validation: ValidationModule,
-          Notification: NotificationModule,
-          UI: UIModule,
-          App,
-        };
-      }
+                } catch (error) {
+                    console.error('Erro durante login:', error);
+                    NotificationModule.error(error.message || "Erro ao fazer login. Tente novamente.");
+
+                } finally {
+                    // Restaurar botão
+                    const loginButton = document.querySelector(".btn-login");
+                    loginButton.disabled = false;
+                    loginButton.innerHTML = '<i class="fas fa-sign-in-alt"></i> Entrar';
+                }
+            };
+
+            const init = () => {
+                UIModule.init(); // Inicializa os eventos da UI
+                loginForm.addEventListener('submit', processLogin);
+                console.log("🚀 Página de Login inicializada!");
+            };
+
+            return {
+                init
+            };
+        })();
+
+        // Inicializa a aplicação quando o DOM estiver carregado
+        document.addEventListener('DOMContentLoaded', App.init);
     </script>
-  </body>
+</body>
 </html>
